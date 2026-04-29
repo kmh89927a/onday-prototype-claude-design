@@ -44,5 +44,27 @@
 6. design-input/
 
 ## Mock 모드
-- `NEXT_PUBLIC_USE_MOCK=true`로 모든 외부 의��성 Mock
+- `NEXT_PUBLIC_USE_MOCK=true`로 모든 외부 의존성 Mock
 - SQLite 로컬 DB (DATABASE_PROVIDER=sqlite)
+- Prisma 7 + better-sqlite3 adapter
+
+## 현재 진행 상황
+
+| Step | 내용 | 상태 | 커밋 |
+|------|------|------|------|
+| 1 | 프로젝트 초기화 + 토큰 통합 계획 | 완료 | `64c6239` |
+| 2 | 디자인 토큰 검증 (globals.css + tailwind.config.ts + 샘플 페이지) | 완료 | `4824109` |
+| 3 | Mock 인프라 (Prisma, API 4개, Haversine, Zustand, TanStack Query) | 완료 | `7ba116b` |
+| 4 | shadcn/ui 기반 컴포넌트 설치 + 온데이 커스터마이징 | 다음 |  |
+| 5 | 31개 커스텀 컴포넌트 (체크포인트) | 예정 |  |
+
+## 다음 시작 지점
+**Step 4**: shadcn/ui 기반 컴포넌트 설치 + 온데이 디자인 커스터마이징
+- `npx shadcn add` 로 필요한 base 컴포넌트 추가
+- 온데이 디자인 토큰에 맞게 커스터마이징
+- design-input/screens/*.html 참조하여 시각적 일치 확인
+
+## 주의사항
+- 한글 인코딩: Write 후 반드시 `grep -rn $'\xef\xbf\xbd'` 로 검증
+- Prisma 7: `@/generated/prisma/client` 경로 사용 (index.ts 없음)
+- shadcn v4: `@base-ui/react` 사용 (Radix 아님), oklch 덮어쓰기 주의
