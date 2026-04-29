@@ -52,7 +52,7 @@ export default function TokenSamplePage() {
         <section className="space-y-s-2">
           <h2 className="text-title text-ink">Card (shadow-card + radius-lg)</h2>
           <div className="rounded-lg border border-card-border bg-surface p-s-4 shadow-card">
-            <h3 className="text-title text-ink">서울 마포구 ��정동</h3>
+            <h3 className="text-title text-ink">서울 마포구 공덕동</h3>
             <p className="mt-s-1 text-body text-ink-2">통근시간 A: 25분 | B: 38분</p>
             <p className="mt-s-1 text-caption text-ink-3">평균 매매가 9.2억</p>
           </div>
@@ -71,7 +71,7 @@ export default function TokenSamplePage() {
             <p className="text-body">body — 본문 텍스트 14px</p>
             <p className="text-body-sm">body-sm — 보조 텍스트 13px</p>
             <p className="text-caption">caption — 캡션 12px</p>
-            <p className="text-caption-xs">caption-xs — 최��� 11px</p>
+            <p className="text-caption-xs">caption-xs — 최소 11px</p>
           </div>
         </section>
 
@@ -93,7 +93,7 @@ export default function TokenSamplePage() {
         <section className="space-y-s-2">
           <h2 className="text-title text-ink">OAuth Buttons (login only)</h2>
           <button className="w-full rounded-2xl bg-oauth-kakao py-3 text-title text-oauth-kakao-ink">
-            카��오로 시작하기
+            카카오로 시작하기
           </button>
           <button className="w-full rounded-2xl bg-oauth-naver py-3 text-title text-oauth-naver-ink">
             네이버로 시작하기
