@@ -46,8 +46,12 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma local db
+*.db
+*.db-journal
 prisma/dev.db
 prisma/dev.db-journal
 
 # sentry
 .sentryclirc
+
+/src/generated/prisma
