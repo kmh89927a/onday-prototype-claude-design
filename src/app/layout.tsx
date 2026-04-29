@@ -1,0 +1,15 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "온데이 — 동네궁합 진단기",
+  description: "두 사람의 출퇴근, 가장 합리적인 동네는?",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ko">
+      <body className="bg-white text-black antialiased">{children}</body>
+    </html>
+  );
+}
