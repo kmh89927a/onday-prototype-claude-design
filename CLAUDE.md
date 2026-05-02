@@ -55,15 +55,23 @@
 | 1 | 프로젝트 초기화 + 토큰 통합 계획 | 완료 | `64c6239` |
 | 2 | 디자인 토큰 검증 (globals.css + tailwind.config.ts + 샘플 페이지) | 완료 | `4824109` |
 | 3 | Mock 인프라 (Prisma, API 4개, Haversine, Zustand, TanStack Query) | 완료 | `7ba116b` |
-| 4 | shadcn/ui base 9개 + Button/Input/Card/Badge/Tabs/Sheet/Dialog 온데이 토큰 커스터마이징 | 완료 |  |
-| 5 | 31개 커스텀 컴포넌트 (체크포인트) | 다음 |  |
+| 4 | shadcn/ui base 9개 + onday 토큰 + Base UI data-props 호환 + 3폭 검증 페이지 | 완료 | `493e219` |
+| 5 | 31개 커스텀 컴포넌트 (5-Layer + primary-pastel 토큰) | 완료 | `d586380` |
+| 6 | /dev production 가드 + Zustand store 분리(session/favorites/ui) | 진행 중 |  |
 
 ## 다음 시작 지점
-**Step 5**: components-spec.md 의 31개 커스텀 컴포넌트 구현
-- 카테고리별: Layout/Navigation/Action/Form/Display/Map/Card/Surface/Composite
-- 각 컴포넌트는 base ui/* 컴포넌트를 조합 + 온데이 토큰 적용
-- design-input/screens/*.html 의 시각/인터랙션 사양 그대로 재현
-- 우선순위: AppHeader → AddressInput/SuggestList → CandidateCard → BottomSheet/DetailSheet → SafetyCard/SafetyBar (single 모드)
+**Step 6**: 상태 관리 본 작업 — Zustand 3 store 분리
+- /dev production 가드 ✓ (`src/middleware.ts` — NODE_ENV=production 시 /dev/* → 404)
+- Zustand store 분리 (다음):
+  - `session` — 사용자 인증 / 게스트 모드 / 진단 입력 보존
+  - `favorites` — 저장한 동네 (CMD-SAVE-001 연계)
+  - `ui` — sheet open / filter panel state / 모달 등 UI 상태
+- Step 3에서 만든 zustand 1 store가 있을 가능성 → 분리 또는 신규 생성
+- TanStack Query와 역할 구분: server state는 TanStack, client state는 Zustand
+
+## Step 12 직전 cleanup 예정 (P2/P3)
+- grade 파스텔 6색 → globals.css 토큰화 (현재 3개 파일에 hsl 인라인 중복)
+- `key={i}` 9건 → 안정적 식별자로 교체 (DetailSheet commutes/pills/metrics 등)
 
 ## 주의사항
 - 한글 인코딩: Write 후 반드시 `grep -rn $'\xef\xbf\xbd'` 로 검증
