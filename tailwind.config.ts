@@ -41,6 +41,7 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           soft: "hsl(var(--primary-soft))",
+          pastel: "hsl(var(--primary-pastel))",
           deep: "hsl(var(--primary-deep))",
           foreground: "hsl(var(--primary-foreground))",
         },

@@ -23,8 +23,12 @@
 
     /* ───── Brand ───── */
     --primary: 221 83% 53%;
-    --primary-soft: 220 100% 96%;
-    --primary-deep: 226 71% 33%;
+    /* primary-pastel: 큰 면적 배경 강조 (DDayCounter normal, MiniCalendar target)
+       안전등급 grade-b(87%)와 시각 톤 일관 */
+    --primary-pastel: 221 83% 90%;
+    /* primary-soft: 일반 활성/소프트 배경 (Card.accent, ModeSelector active 등 다수) */
+    --primary-soft: 221 83% 95%;
+    --primary-deep: 221 83% 35%;
     --primary-foreground: 0 0% 100%;
     --secondary: 262 83% 58%;
     --secondary-foreground: 0 0% 100%;
@@ -112,8 +116,9 @@
     --line: 222 18% 20%;
     --line-2: 222 15% 18%;
     --primary: 221 90% 65%;
-    --primary-soft: 222 30% 18%;
-    --primary-deep: 226 71% 50%;
+    --primary-pastel: 222 30% 18%;
+    --primary-soft: 222 28% 14%;
+    --primary-deep: 221 83% 50%;
   }
 
   /* ───── Base resets ───── */

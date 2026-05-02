@@ -26,6 +26,9 @@ import { LegendBar } from "@/components/data/legend-bar";
 import { SafetyBar } from "@/components/data/safety-bar";
 import { SafetyGradeBadge } from "@/components/data/safety-grade-badge";
 import { Stat } from "@/components/data/stat";
+import { DDayCounter } from "@/components/deadline/dday-counter";
+import { MiniCalendar } from "@/components/deadline/mini-calendar";
+import { TimelineStep } from "@/components/deadline/timeline-step";
 import {
   AddressInput,
   type AddressSuggestion,
@@ -33,8 +36,11 @@ import {
 import { FilterChip } from "@/components/form/filter-chip";
 import { ModeSelector, type ModeKey } from "@/components/form/mode-selector";
 import { TimeTabs } from "@/components/form/time-tabs";
+import { AppHeader } from "@/components/layout/app-header";
 import { PhoneFrame } from "@/components/layout/phone-frame";
 import { StickyCTABar } from "@/components/layout/sticky-cta-bar";
+import { MapCanvas } from "@/components/map/map-canvas";
+import { BottomSheet } from "@/components/sheet/bottom-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
@@ -177,6 +183,8 @@ export default function DevSamplePage() {
   const [mode, setMode] = useState<ModeKey>("couple");
   const [time, setTime] = useState<TimeBucket>("08");
   const [budgetActive, setBudgetActive] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [calMonth, setCalMonth] = useState({ year: 2026, month: 5 });
 
   return (
     <main className="min-h-screen bg-bg p-s-5">
@@ -186,13 +194,15 @@ export default function DevSamplePage() {
           <div className="flex flex-wrap items-center gap-s-2">
             <Badge variant="solid">_dev</Badge>
             <Badge variant="ok">Step 4</Badge>
-            <Badge>Step 5 · L1 (5/31)</Badge>
-            <Badge>Step 5 · L2 (17/31)</Badge>
+            <Badge>L1 (5)</Badge>
+            <Badge>L2 (12)</Badge>
+            <Badge>L3 (7)</Badge>
+            <Badge variant="solid">누적 24/31</Badge>
           </div>
           <h1 className="text-h2 text-ink">시각 검증 페이지</h1>
           <p className="text-body-sm text-ink-3">
-            Step 5 Layer 2 신규 12개 + Layer 1 5개 + Step 4 baseline 9개
-            컴포넌트를 한 화면에서 검토합니다.
+            Step 5 Layer 3 신규 7개 + Layer 2 12개 + Layer 1 5개 + Step 4
+            baseline 9개를 한 화면에서 검토합니다.
           </p>
           <div className="rounded-md border border-line-2 bg-surface px-s-3 py-s-2 text-caption text-ink-3">
             상위 검증 포인트 — primary{" "}
@@ -454,12 +464,341 @@ export default function DevSamplePage() {
           </div>
         </Section>
 
+        {/* ═════════ STEP 5 · LAYER 3 (7개 신규) ═════════ */}
+        <GroupHeading
+          badge="STEP 5 · LAYER 3 — 7/31 (누적 24/31)"
+          title="네비/맵/시트/데드라인 코어"
+          hint="AppHeader · MapMarker · MapCanvas · BottomSheet · DDayCounter · MiniCalendar · TimelineStep"
+          tone="primary"
+        />
+
+        {/* L3-01 AppHeader */}
+        <Section
+          prefix="L3"
+          index={1}
+          title="AppHeader"
+          hint="height 48 · 좌측 back · 가운데 title · 우측 trailing"
+          checks={[
+            "<header role='banner'> 시맨틱",
+            "back IconButton — aria-label='이전' (next/router.back 자동)",
+            "title 가운데 정렬 + truncate / trailing 1~2개 IconButton",
+            "변형: back-only · back+trailing · back+title+trailing",
+          ]}
+        >
+          <div className="space-y-s-3 rounded-xl border border-line-2 bg-bg p-s-3">
+            <div className="rounded-lg border border-card-border bg-surface">
+              <AppHeader backHref="#" />
+              <p className="px-s-4 py-s-3 text-caption text-ink-3">
+                back-only (login → diagnosis 진입)
+              </p>
+            </div>
+            <div className="rounded-lg border border-card-border bg-surface">
+              <AppHeader
+                backHref="#"
+                trailing={
+                  <Button size="sm" variant="outline">
+                    이전 조건 불러오기
+                  </Button>
+                }
+              />
+              <p className="px-s-4 py-s-3 text-caption text-ink-3">
+                back + trailing (diagnosis)
+              </p>
+            </div>
+            <div className="rounded-lg border border-card-border bg-surface">
+              <AppHeader
+                backHref="#"
+                title="후보 동네 결과"
+                trailing={
+                  <IconButton
+                    icon={<Share2 />}
+                    ariaLabel="공유"
+                    variant="plain"
+                  />
+                }
+              />
+              <p className="px-s-4 py-s-3 text-caption text-ink-3">
+                back + title + trailing (result)
+              </p>
+            </div>
+          </div>
+        </Section>
+
+        {/* L3-02 MapMarker + L3-03 MapCanvas */}
+        <Section
+          prefix="L3"
+          index={2}
+          title="MapMarker + MapCanvas"
+          hint="placeholder SVG (격자 + 한강) + 마커 6개 + 줌 컨트롤 슬롯"
+          checks={[
+            "MapCanvas: role='application' + aria-label='후보 동네 지도'",
+            "default 마커: 흰 배경 + primary stroke + primary text",
+            "selected/best 마커: primary 채움 + 흰 stroke + 흰 text + warning 1위 뱃지",
+            "topRight/bottomRight slot — pill, 줌 컨트롤",
+            "dim={true} 시 detail 시트 뒤 배경 (ink/45 오버레이)",
+          ]}
+        >
+          <MapCanvas
+            height={260}
+            markers={[
+              {
+                id: "1",
+                label: "마포",
+                position: { x: 110, y: 130 },
+                rank: 1,
+                selected: true,
+              },
+              { id: "2", label: "성수", position: { x: 220, y: 110 } },
+              { id: "3", label: "공덕", position: { x: 80, y: 175 } },
+              { id: "4", label: "용산", position: { x: 165, y: 165 } },
+              { id: "5", label: "동작", position: { x: 130, y: 230 } },
+              { id: "6", label: "흑석", position: { x: 200, y: 240 } },
+            ]}
+            topRightSlot={
+              <Badge variant="ok" size="xs">
+                내 위치
+              </Badge>
+            }
+            bottomRightSlot={
+              <div className="flex flex-col gap-1 rounded-md bg-surface shadow-lg">
+                <IconButton
+                  icon={<Plus />}
+                  ariaLabel="확대"
+                  variant="bordered"
+                />
+                <IconButton
+                  icon={<X className="rotate-45" />}
+                  ariaLabel="축소"
+                  variant="bordered"
+                />
+              </div>
+            }
+          />
+          <p className="text-caption text-ink-3">
+            ※ 1위(마포) 마커는 primary 채움 + 우상단 노란 1번 뱃지. 다른 마커는
+            흰 배경 + primary stroke.
+          </p>
+        </Section>
+
+        {/* L3-04 BottomSheet */}
+        <Section
+          prefix="L3"
+          index={3}
+          title="BottomSheet"
+          hint="re-usable primitive — DetailSheet 베이스가 됨"
+          checks={[
+            "open=true 시 backdrop opacity 0→1 (220ms) + 시트 translateY 100→0 (280ms cubic-bezier)",
+            "showHandle: 상단 36×4 핸들바",
+            "showFloatingClose: 우상단 floating close 버튼 (shadow-floating)",
+            "dismissOnBackdrop: 백드롭 클릭 닫기 (default true)",
+            "role=dialog + aria-modal=true + aria-label",
+            "Esc 닫기 + 포커스 트랩",
+          ]}
+        >
+          <Button onClick={() => setSheetOpen(true)} fullWidth>
+            BottomSheet 열기
+          </Button>
+          <BottomSheet
+            open={sheetOpen}
+            onClose={() => setSheetOpen(false)}
+            ariaLabel="동네 상세"
+            height="auto"
+          >
+            <h3 className="text-h3 font-bold text-ink">마포구 공덕동</h3>
+            <p className="mt-s-1 text-body-sm text-ink-3">
+              종합 점수 92점 · 평균 통근 31분
+            </p>
+            <div className="mt-s-3 grid grid-cols-2 gap-s-2">
+              <Stat label="A 통근" value="25분" />
+              <Stat label="B 통근" value="38분" />
+            </div>
+            <p className="mt-s-3 text-body-sm text-ink-2">
+              핸들 잡고 아래로 드래그, 백드롭 클릭, Esc 키 → 닫기.
+            </p>
+            <div className="mt-s-4 flex gap-s-2">
+              <Button variant="outline" fullWidth>
+                저장
+              </Button>
+              <Button fullWidth onClick={() => setSheetOpen(false)}>
+                확인
+              </Button>
+            </div>
+          </BottomSheet>
+        </Section>
+
+        {/* L3-05 DDayCounter */}
+        <Section
+          prefix="L3"
+          index={4}
+          title="DDayCounter"
+          hint="role=timer + aria-live=polite, urgency 3종 (normal/soon/critical)"
+          checks={[
+            "normal: primary-deep → primary 그라디언트",
+            "soon (D-7 이하): pulse-soft 애니 + 글로우",
+            "critical (D-1 이하): danger 그라디언트",
+            "display-1 (44px) tabular 숫자",
+            "aria-label='이사까지 30일 남음, 마감일 ...'",
+          ]}
+        >
+          <DDayCounter daysLeft={30} targetDate="2026년 5월 27일 (수)" />
+          <DDayCounter
+            daysLeft={5}
+            targetDate="2026년 5월 7일 (목)"
+            urgency="soon"
+            caption="MOVE-IN COUNTDOWN · 임박"
+          />
+          <DDayCounter
+            daysLeft={1}
+            targetDate="2026년 5월 3일 (일)"
+            urgency="critical"
+            caption="LAST CALL"
+          />
+        </Section>
+
+        {/* L3-06 MiniCalendar */}
+        <Section
+          prefix="L3"
+          index={5}
+          title="MiniCalendar"
+          hint="grid 7-col · 28px cell · in-range/target/empty cell"
+          checks={[
+            "role=grid · weekday role=columnheader · cell role=gridcell",
+            "in-range: bg primary-soft + text primary",
+            "target: bg primary + text white + font-extrabold + aria-current='date'",
+            "interactive=true(onSelect 있음)일 때 hover bg-bg + 키보드 포커스 ring",
+            "이전/다음 달 IconButton (aria-label)",
+          ]}
+        >
+          <MiniCalendar
+            year={calMonth.year}
+            month={calMonth.month}
+            inRange={[5, 6, 7, 8, 9, 10, 11, 12]}
+            target={27}
+            onPrev={() =>
+              setCalMonth((m) =>
+                m.month === 1
+                  ? { year: m.year - 1, month: 12 }
+                  : { ...m, month: m.month - 1 },
+              )
+            }
+            onNext={() =>
+              setCalMonth((m) =>
+                m.month === 12
+                  ? { year: m.year + 1, month: 1 }
+                  : { ...m, month: m.month + 1 },
+              )
+            }
+          />
+          <p className="text-caption text-ink-3">
+            ← / → 클릭으로 월 이동. in-range(5~12일) 파스텔 배경, 타겟(27일)
+            primary 채움.
+          </p>
+        </Section>
+
+        {/* L3-07 TimelineStep */}
+        <Section
+          prefix="L3"
+          index={6}
+          title="TimelineStep"
+          hint="<ol role='list'> 안에 5단계 · status done/now/todo"
+          checks={[
+            "done: 점 채움 primary + ✓ / now: 보더 + 글로우(shadow-marker) + 카드 primary-soft",
+            "todo: 점 보더 line + 흰 카드",
+            "stage(D-30) + label + sub + 선택 pill",
+            "now 단계: aria-current='step'",
+            "라인 마스킹: first(상단 짧음) / middle / last(하단 짧음)",
+          ]}
+        >
+          <ol
+            role="list"
+            aria-label="이사 체크리스트"
+            className="rounded-lg border border-card-border bg-surface p-s-4 shadow-card"
+          >
+            <TimelineStep
+              status="done"
+              stage="D-30"
+              label="조건 입력"
+              sub="두 직장 주소 + 예산 + 시간대"
+              position="first"
+              pill={{ variant: "ok", label: "완료" }}
+            />
+            <TimelineStep
+              status="done"
+              stage="D-25"
+              label="후보 동네 압축"
+              sub="6~8곳 추출"
+              pill={{ variant: "ok", label: "완료" }}
+            />
+            <TimelineStep
+              status="now"
+              stage="D-7"
+              label="실거래 확인 + 임장"
+              sub="현장 답사로 확정 후보 좁히기"
+              pill={{ variant: "default", label: "진행 중" }}
+            />
+            <TimelineStep
+              status="todo"
+              stage="D-3"
+              label="계약 조건 협상"
+              sub="중도금 일정, 잔금 조건 확정"
+              pill={{ variant: "warning", label: "임박" }}
+            />
+            <TimelineStep
+              status="todo"
+              stage="D-Day"
+              label="이사"
+              sub="잔금 + 입주"
+              position="last"
+              pill={{ variant: "danger", label: "놓치면 위약금" }}
+            />
+          </ol>
+        </Section>
+
+        {/* L3-(통합) deadline 페이지 미리보기 */}
+        <Section
+          prefix="L3"
+          index={7}
+          title="통합 데모 (deadline 미리보기)"
+          hint="DDayCounter + MiniCalendar + TimelineStep 결합"
+          checks={[
+            "deadline 페이지 핵심 구조 미리 보기",
+            "DDayCounter 헤로 + MiniCalendar 좌 + TimelineStep 카드 우",
+          ]}
+        >
+          <DDayCounter daysLeft={30} targetDate="2026년 5월 27일 (수)" />
+          <MiniCalendar
+            year={2026}
+            month={5}
+            inRange={[5, 6, 7, 8, 9, 10, 11, 12]}
+            target={27}
+          />
+          <ol
+            role="list"
+            aria-label="다가오는 단계"
+            className="rounded-lg border border-card-border bg-surface p-s-4 shadow-card"
+          >
+            <TimelineStep
+              status="now"
+              stage="D-30"
+              label="현재 단계 — 후보 압축"
+              position="first"
+              pill={{ variant: "default", label: "진행 중" }}
+            />
+            <TimelineStep
+              status="todo"
+              stage="D-7"
+              label="실거래 + 임장"
+              position="last"
+            />
+          </ol>
+        </Section>
+
         {/* ═════════ STEP 5 · LAYER 2 (12개 신규) ═════════ */}
         <GroupHeading
           badge="STEP 5 · LAYER 2 — 12/31"
           title="도메인 형식·표시 컴포넌트"
           hint="OAuth · CTA · 주소 자동완성 · 모드 선택 · 시간 탭 · 필터 · 데이터 출처 · 안전등급 · 통근 · 막대"
-          tone="primary"
+          tone="muted"
         />
 
         {/* L2-01 OAuthButton */}
