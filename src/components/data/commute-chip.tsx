@@ -8,25 +8,25 @@ import { cn } from "@/lib/utils";
 //   chip(result, 컴팩트) / row(detail, full width)
 //   aria-label 종합 ("A 직장까지 지하철 18분, 환승 1회")
 
-type Mode = "subway" | "bus" | "car" | "walk";
+export type CommuteMode = "subway" | "bus" | "car" | "walk";
 
-const MODE_ICONS: Record<Mode, React.ComponentType<{ className?: string }>> = {
+const MODE_ICONS: Record<CommuteMode, React.ComponentType<{ className?: string }>> = {
   subway: TrainFront,
   bus: Bus,
   car: Car,
   walk: Footprints,
 };
 
-const MODE_LABELS: Record<Mode, string> = {
+const MODE_LABELS: Record<CommuteMode, string> = {
   subway: "지하철",
   bus: "버스",
   car: "차량",
   walk: "도보",
 };
 
-interface CommuteChipProps {
+export interface CommuteChipProps {
   tag: "A" | "B";
-  mode: Mode;
+  mode: CommuteMode;
   minutes: number;
   detail?: string;
   variant?: "chip" | "row";

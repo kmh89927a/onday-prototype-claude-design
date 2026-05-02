@@ -20,6 +20,8 @@ import {
   X,
 } from "lucide-react";
 
+import { CandidateCard } from "@/components/card/candidate-card";
+import { SafetyCard } from "@/components/card/safety-card";
 import { CommuteChip } from "@/components/data/commute-chip";
 import { DataSourceBadge } from "@/components/data/data-source-badge";
 import { LegendBar } from "@/components/data/legend-bar";
@@ -40,6 +42,8 @@ import { AppHeader } from "@/components/layout/app-header";
 import { PhoneFrame } from "@/components/layout/phone-frame";
 import { StickyCTABar } from "@/components/layout/sticky-cta-bar";
 import { MapCanvas } from "@/components/map/map-canvas";
+import { LockedCard } from "@/components/share/locked-card";
+import { ReportCard } from "@/components/share/report-card";
 import { BottomSheet } from "@/components/sheet/bottom-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -197,11 +201,12 @@ export default function DevSamplePage() {
             <Badge>L1 (5)</Badge>
             <Badge>L2 (12)</Badge>
             <Badge>L3 (7)</Badge>
-            <Badge variant="solid">누적 24/31</Badge>
+            <Badge>L4 (4)</Badge>
+            <Badge variant="solid">누적 28/31</Badge>
           </div>
           <h1 className="text-h2 text-ink">시각 검증 페이지</h1>
           <p className="text-body-sm text-ink-3">
-            Step 5 Layer 3 신규 7개 + Layer 2 12개 + Layer 1 5개 + Step 4
+            Step 5 Layer 4 신규 4개 + L3 7개 + L2 12개 + L1 5개 + Step 4
             baseline 9개를 한 화면에서 검토합니다.
           </p>
           <div className="rounded-md border border-line-2 bg-surface px-s-3 py-s-2 text-caption text-ink-3">
@@ -464,12 +469,171 @@ export default function DevSamplePage() {
           </div>
         </Section>
 
+        {/* ═════════ STEP 5 · LAYER 4 (4개 신규) ═════════ */}
+        <GroupHeading
+          badge="STEP 5 · LAYER 4 — 4/31 (누적 28/31)"
+          title="결과·공유·싱글 카드"
+          hint="CandidateCard · ReportCard · LockedCard · SafetyCard"
+          tone="primary"
+        />
+
+        {/* L4-01 CandidateCard */}
+        <Section
+          prefix="L4"
+          index={1}
+          title="CandidateCard"
+          hint="result 후보 동네 리스트 · default / best (rank=1) 변형"
+          checks={[
+            "default: 흰 카드 + card-shadow",
+            "best (rank=1): bg-primary-soft + border-primary + BEST 솔리드 뱃지",
+            "score 큰 숫자 + best일 때 primary 색",
+            "CommuteChip 가로 배치 + 평균 시세 표기",
+            "hover: -translate-y-px + shadow-card-hover",
+            "aria-label 종합 (이름·점수·순위·통근·시세)",
+          ]}
+        >
+          <CandidateCard
+            name="마포구 공덕동"
+            score={92}
+            rank={1}
+            commutes={[
+              { tag: "A", mode: "subway", minutes: 18 },
+              { tag: "B", mode: "subway", minutes: 32 },
+            ]}
+            price="평균 9.2억"
+            href="#"
+          />
+          <CandidateCard
+            name="동작구 흑석동"
+            score={88}
+            rank={2}
+            commutes={[
+              { tag: "A", mode: "bus", minutes: 25 },
+              { tag: "B", mode: "subway", minutes: 28 },
+            ]}
+            price="평균 8.4억"
+            href="#"
+          />
+          <CandidateCard
+            name="용산구 한남동"
+            score={84}
+            rank={3}
+            commutes={[
+              { tag: "A", mode: "car", minutes: 22 },
+              { tag: "B", mode: "bus", minutes: 35 },
+            ]}
+            price="평균 11.8억"
+            href="#"
+          />
+        </Section>
+
+        {/* L4-02 ReportCard */}
+        <Section
+          prefix="L4"
+          index={2}
+          title="ReportCard"
+          hint="share 후보 카드 · 헤더 + 2×2 stats grid · preview pill"
+          checks={[
+            "<article><h3>name</h3>",
+            "score: tabular title-lg + primary 색",
+            "preview=true: ok pill '무료 미리보기' 우상단",
+            "stats 2×2 grid (gap 6px)",
+            "aria-label='매칭 점수 92점'",
+          ]}
+        >
+          <ReportCard
+            name="마포구 공덕동"
+            score={92}
+            preview
+            stats={[
+              { label: "A 통근", value: "18분" },
+              { label: "B 통근", value: "32분" },
+              { label: "안전등급", value: "B 안전" },
+              { label: "평균 매가", value: "9.2억" },
+            ]}
+          />
+        </Section>
+
+        {/* L4-03 LockedCard */}
+        <Section
+          prefix="L4"
+          index={3}
+          title="LockedCard"
+          hint="자식 콘텐츠 blur(8px) + ink/45 오버레이 + 자물쇠"
+          checks={[
+            "자식 콘텐츠 aria-hidden=true (스크린 리더 제외)",
+            "blur 8px + opacity 0.95",
+            "ink/45 dim + 흰 자물쇠 + 메시지",
+            "onUnlock 있을 때 role=button + 키보드 포커스",
+            "hover: 오버레이 살짝 더 진해짐 (가입 유도)",
+          ]}
+        >
+          <LockedCard
+            onUnlock={() => alert("회원가입 라우팅")}
+            message="회원가입하면 전체 정보를 볼 수 있어요"
+          >
+            <ReportCard
+              name="성동구 성수동"
+              score={86}
+              stats={[
+                { label: "A 통근", value: "20분" },
+                { label: "B 통근", value: "28분" },
+                { label: "안전등급", value: "A 매우 안전" },
+                { label: "평균 매가", value: "10.5억" },
+              ]}
+            />
+          </LockedCard>
+        </Section>
+
+        {/* L4-04 SafetyCard */}
+        <Section
+          prefix="L4"
+          index={4}
+          title="SafetyCard"
+          hint="single 페이지 야간 안전 카드 · header + SafetyBar + 3-col Stats"
+          checks={[
+            "<article> + h3 + sub",
+            "우상단 SafetyGradeBadge (letter+label+색)",
+            "SafetyBar IntersectionObserver 진입 애니",
+            "3등분 Stat tile (통근/시세/범죄 등)",
+            "href/onClick 시 hover translateY(-1px)",
+          ]}
+        >
+          <SafetyCard
+            name="마포구 공덕동"
+            sub="반경 1km · 인접 4개 동 기준"
+            grade="A"
+            gradeLabel="야간 매우 안전"
+            metric={{ label: "야간 범죄율 (10만명당)", value: 0.84, unit: "건" }}
+            barPercent={28}
+            stats={[
+              { label: "통근", value: "31", sub: "분" },
+              { label: "시세", value: "9.2", sub: "억" },
+              { label: "안전", value: "A" },
+            ]}
+            href="#"
+          />
+          <SafetyCard
+            name="용산구 한남동"
+            sub="반경 1km · 인접 3개 동 기준"
+            grade="C"
+            gradeLabel="야간 주의"
+            metric={{ label: "야간 범죄율 (10만명당)", value: 1.4, unit: "건" }}
+            barPercent={68}
+            stats={[
+              { label: "통근", value: "28", sub: "분" },
+              { label: "시세", value: "11.8", sub: "억" },
+              { label: "안전", value: "C" },
+            ]}
+          />
+        </Section>
+
         {/* ═════════ STEP 5 · LAYER 3 (7개 신규) ═════════ */}
         <GroupHeading
-          badge="STEP 5 · LAYER 3 — 7/31 (누적 24/31)"
+          badge="STEP 5 · LAYER 3 — 7/31"
           title="네비/맵/시트/데드라인 코어"
           hint="AppHeader · MapMarker · MapCanvas · BottomSheet · DDayCounter · MiniCalendar · TimelineStep"
-          tone="primary"
+          tone="muted"
         />
 
         {/* L3-01 AppHeader */}
