@@ -55,14 +55,15 @@
 | 1 | 프로젝트 초기화 + 토큰 통합 계획 | 완료 | `64c6239` |
 | 2 | 디자인 토큰 검증 (globals.css + tailwind.config.ts + 샘플 페이지) | 완료 | `4824109` |
 | 3 | Mock 인프라 (Prisma, API 4개, Haversine, Zustand, TanStack Query) | 완료 | `7ba116b` |
-| 4 | shadcn/ui 기반 컴포넌트 설치 + 온데이 커스터마이징 | 다음 |  |
-| 5 | 31개 커스텀 컴포넌트 (체크포인트) | 예정 |  |
+| 4 | shadcn/ui base 9개 + Button/Input/Card/Badge/Tabs/Sheet/Dialog 온데이 토큰 커스터마이징 | 완료 |  |
+| 5 | 31개 커스텀 컴포넌트 (체크포인트) | 다음 |  |
 
 ## 다음 시작 지점
-**Step 4**: shadcn/ui 기반 컴포넌트 설치 + 온데이 디자인 커스터마이징
-- `npx shadcn add` 로 필요한 base 컴포넌트 추가
-- 온데이 디자인 토큰에 맞게 커스터마이징
-- design-input/screens/*.html 참조하여 시각적 일치 확인
+**Step 5**: components-spec.md 의 31개 커스텀 컴포넌트 구현
+- 카테고리별: Layout/Navigation/Action/Form/Display/Map/Card/Surface/Composite
+- 각 컴포넌트는 base ui/* 컴포넌트를 조합 + 온데이 토큰 적용
+- design-input/screens/*.html 의 시각/인터랙션 사양 그대로 재현
+- 우선순위: AppHeader → AddressInput/SuggestList → CandidateCard → BottomSheet/DetailSheet → SafetyCard/SafetyBar (single 모드)
 
 ## 주의사항
 - 한글 인코딩: Write 후 반드시 `grep -rn $'\xef\xbf\xbd'` 로 검증

@@ -220,6 +220,23 @@ const config: Config = {
         "safety-fill": "safety-fill 380ms ease-out forwards",
       },
 
+      // ───────── Data attributes (Base UI / shadcn base-nova) ─────────
+      // Base UI는 상태를 짧은 data-* 속성으로 노출 (data-active, data-orientation 등)
+      // Tailwind v3 단축 modifier (`data-active:` 등) 가 인식되도록 등록
+      data: {
+        active: "active",
+        selected: "selected",
+        disabled: "disabled",
+        open: "open",
+        closed: "closed",
+        hidden: "hidden",
+        pressed: "pressed",
+        "starting-style": "starting-style",
+        "ending-style": "ending-style",
+        horizontal: 'orientation="horizontal"',
+        vertical: 'orientation="vertical"',
+      },
+
       // ───────── Z-index ─────────
       zIndex: {
         nav: "40",
