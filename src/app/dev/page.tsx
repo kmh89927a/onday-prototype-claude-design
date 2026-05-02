@@ -22,6 +22,7 @@ import {
 
 import { CandidateCard } from "@/components/card/candidate-card";
 import { SafetyCard } from "@/components/card/safety-card";
+import { FilterPanel } from "@/components/form/filter-panel";
 import { CommuteChip } from "@/components/data/commute-chip";
 import { DataSourceBadge } from "@/components/data/data-source-badge";
 import { LegendBar } from "@/components/data/legend-bar";
@@ -44,7 +45,9 @@ import { StickyCTABar } from "@/components/layout/sticky-cta-bar";
 import { MapCanvas } from "@/components/map/map-canvas";
 import { LockedCard } from "@/components/share/locked-card";
 import { ReportCard } from "@/components/share/report-card";
+import { ShareHero } from "@/components/share/share-hero";
 import { BottomSheet } from "@/components/sheet/bottom-sheet";
+import { DetailSheet } from "@/components/sheet/detail-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
@@ -188,7 +191,10 @@ export default function DevSamplePage() {
   const [time, setTime] = useState<TimeBucket>("08");
   const [budgetActive, setBudgetActive] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
   const [calMonth, setCalMonth] = useState({ year: 2026, month: 5 });
+  const [filterTime, setFilterTime] = useState<TimeBucket>("08");
+  const [filterPanelBudget, setFilterPanelBudget] = useState(false);
 
   return (
     <main className="min-h-screen bg-bg p-s-5">
@@ -202,12 +208,13 @@ export default function DevSamplePage() {
             <Badge>L2 (12)</Badge>
             <Badge>L3 (7)</Badge>
             <Badge>L4 (4)</Badge>
-            <Badge variant="solid">누적 28/31</Badge>
+            <Badge>L5 (3)</Badge>
+            <Badge variant="solid">31/31 ✓</Badge>
           </div>
           <h1 className="text-h2 text-ink">시각 검증 페이지</h1>
           <p className="text-body-sm text-ink-3">
-            Step 5 Layer 4 신규 4개 + L3 7개 + L2 12개 + L1 5개 + Step 4
-            baseline 9개를 한 화면에서 검토합니다.
+            Step 5 31개 컴포넌트 모두 완료 — Layer 5 신규 3개 + L4 4개 + L3 7개
+            + L2 12개 + L1 5개 + Step 4 baseline 9개.
           </p>
           <div className="rounded-md border border-line-2 bg-surface px-s-3 py-s-2 text-caption text-ink-3">
             상위 검증 포인트 — primary{" "}
@@ -469,12 +476,154 @@ export default function DevSamplePage() {
           </div>
         </Section>
 
+        {/* ═════════ STEP 5 · LAYER 5 (3개 — 마지막) ═════════ */}
+        <GroupHeading
+          badge="STEP 5 · LAYER 5 — 3/31 (31/31 완료 🎉)"
+          title="Composite — 화면 단위 결합 컴포넌트"
+          hint="FilterPanel · DetailSheet · ShareHero"
+          tone="primary"
+        />
+
+        {/* L5-01 FilterPanel */}
+        <Section
+          prefix="L5"
+          index={1}
+          title="FilterPanel"
+          hint="result 헤더 — TimeTabs + FilterChip 가로 + 우측 고급필터"
+          checks={[
+            "<section aria-label='후보 필터'>",
+            "TimeTabs 위, FilterChip 행, 고급필터 IconButton 우측",
+            "FilterChip flex-1로 가로 균등 분배",
+            "고급필터 IconButton variant=bordered",
+          ]}
+        >
+          <FilterPanel
+            time={filterTime}
+            onTimeChange={setFilterTime}
+            timeOptions={TIME_OPTIONS}
+            filters={[
+              { label: "통근시간", value: "60분 이내" },
+              {
+                label: "예산",
+                value: filterPanelBudget ? "8억 이하" : "전체",
+                active: filterPanelBudget,
+                onClick: () => setFilterPanelBudget((v) => !v),
+              },
+            ]}
+            onOpenAdvanced={() => alert("고급 필터 시트 열기")}
+          />
+        </Section>
+
+        {/* L5-02 DetailSheet */}
+        <Section
+          prefix="L5"
+          index={2}
+          title="DetailSheet"
+          hint="BottomSheet + 동네 상세 콘텐츠 composite"
+          checks={[
+            "header: name + score(h1 tabular) + like/share IconButton",
+            "pills(badge xs) + lines(노선 정보) + commute rows + 3-col metrics",
+            "primary CTA(href→render=a, onClick→button)",
+            "BottomSheet에 위임 (280ms ease-sheet, ink/45 dim, Esc 닫기)",
+          ]}
+        >
+          <Button onClick={() => setDetailOpen(true)} fullWidth>
+            DetailSheet 열기 (마포구 공덕동)
+          </Button>
+          <DetailSheet
+            open={detailOpen}
+            onClose={() => setDetailOpen(false)}
+            candidate={{
+              name: "마포구 공덕동",
+              score: 92,
+              pills: [
+                { variant: "solid", label: "BEST" },
+                { variant: "ok", label: "검증됨" },
+                { variant: "warning", label: "매물 32건" },
+              ],
+              lines: "5·6호선 · 경의중앙선 환승",
+              commutes: [
+                {
+                  tag: "A",
+                  dest: "강남구 테헤란로 152",
+                  mode: "subway",
+                  modeLabel: "지하철",
+                  detail: "환승 1회",
+                  minutes: 18,
+                },
+                {
+                  tag: "B",
+                  dest: "성남시 분당구 판교",
+                  mode: "subway",
+                  modeLabel: "지하철",
+                  detail: "환승 2회",
+                  minutes: 32,
+                },
+              ],
+              metrics: [
+                { label: "면적", value: "84", sub: "㎡" },
+                { label: "평균가", value: "9.2", sub: "억" },
+                { label: "매물", value: "32", sub: "건" },
+              ],
+            }}
+            onLike={() => alert("저장됨")}
+            onShare={() => alert("공유 링크 복사")}
+            primaryCta={{
+              label: "이 동네 매물 보기",
+              onClick: () => setDetailOpen(false),
+            }}
+          />
+        </Section>
+
+        {/* L5-03 ShareHero */}
+        <Section
+          prefix="L5"
+          index={3}
+          title="ShareHero"
+          hint="share 페이지 그라디언트 헤더 — 브랜드 + 익명칩 + 타이틀 + 데이터 출처"
+          checks={[
+            "primary-deep → primary 그라디언트 배경 (white 텍스트)",
+            "<header><h1> 시맨틱 + brand caption",
+            "expiryChip: 익명·7일 한정 (bg white/15 backdrop-blur)",
+            "DataSourceBadge[] tone='on-dark'로 자동 매핑",
+          ]}
+        >
+          <ShareHero
+            brand="동네궁합 · 공유 리포트"
+            expiryChip="익명 · 7일 한정"
+            title={
+              <>
+                두 사람의 합리적인
+                <br />
+                동네는 마포구 공덕동
+              </>
+            }
+            badges={[
+              {
+                kind: "official",
+                source: "공공데이터",
+                updatedAt: "2026.04",
+              },
+              {
+                kind: "aggregated",
+                source: "카카오 모빌리티",
+                updatedAt: "2026.04.01",
+              },
+              {
+                kind: "estimate",
+                source: "통근 추정",
+                updatedAt: "-",
+              },
+            ]}
+          />
+        </Section>
+
         {/* ═════════ STEP 5 · LAYER 4 (4개 신규) ═════════ */}
         <GroupHeading
-          badge="STEP 5 · LAYER 4 — 4/31 (누적 28/31)"
+          badge="STEP 5 · LAYER 4 — 4/31"
           title="결과·공유·싱글 카드"
           hint="CandidateCard · ReportCard · LockedCard · SafetyCard"
-          tone="primary"
+          tone="muted"
         />
 
         {/* L4-01 CandidateCard */}
