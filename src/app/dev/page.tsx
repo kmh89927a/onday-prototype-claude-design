@@ -48,6 +48,7 @@ import { ReportCard } from "@/components/share/report-card";
 import { ShareHero } from "@/components/share/share-hero";
 import { BottomSheet } from "@/components/sheet/bottom-sheet";
 import { DetailSheet } from "@/components/sheet/detail-sheet";
+import { useUIStore } from "@/stores/ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
@@ -98,6 +99,101 @@ function CheckList({ items }: { items: string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+function ToastDemo() {
+  const pushToast = useUIStore((s) => s.pushToast);
+  return (
+    <section className="space-y-s-3">
+      <p className="text-body-sm text-ink-3">
+        4가지 variant — 화면 상단에 토스트가 뜨고 3초 후 자동 dismiss. X 버튼으로
+        수동 닫기 가능.
+      </p>
+      <div className="grid grid-cols-2 gap-s-2">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            pushToast({ variant: "default", message: "기본 알림입니다" })
+          }
+        >
+          default
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            pushToast({ variant: "ok", message: "공덕동 저장 완료" })
+          }
+        >
+          ok
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            pushToast({ variant: "warning", message: "매물 5건 미만입니다" })
+          }
+        >
+          warning
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            pushToast({ variant: "danger", message: "네트워크 오류" })
+          }
+        >
+          danger
+        </Button>
+      </div>
+      <Button
+        fullWidth
+        onClick={() => {
+          pushToast({ variant: "default", message: "첫 번째" });
+          setTimeout(
+            () => pushToast({ variant: "ok", message: "두 번째 (스택)" }),
+            300,
+          );
+          setTimeout(
+            () =>
+              pushToast({ variant: "warning", message: "세 번째 — 큐 누적" }),
+            600,
+          );
+        }}
+      >
+        스택 시연 (3개 연속)
+      </Button>
+      <ul className="rounded-md border border-line-2 bg-surface-soft px-s-3 py-s-2 text-caption text-ink-2">
+        <li className="flex items-start gap-s-1 leading-relaxed">
+          <span aria-hidden className="text-success">
+            ✓
+          </span>
+          <span>
+            useUIStore.pushToast — id 자동 생성 (crypto.randomUUID + 폴백)
+          </span>
+        </li>
+        <li className="flex items-start gap-s-1 leading-relaxed">
+          <span aria-hidden className="text-success">
+            ✓
+          </span>
+          <span>3초 자동 dismiss · 수동 X 버튼 닫기</span>
+        </li>
+        <li className="flex items-start gap-s-1 leading-relaxed">
+          <span aria-hidden className="text-success">
+            ✓
+          </span>
+          <span>z-toast (120) — Sheet/Dialog 위에 표시</span>
+        </li>
+        <li className="flex items-start gap-s-1 leading-relaxed">
+          <span aria-hidden className="text-success">
+            ✓
+          </span>
+          <span>role=region + aria-live=polite — 스크린리더 자동 알림</span>
+        </li>
+      </ul>
+    </section>
   );
 }
 
@@ -228,6 +324,17 @@ export default function DevSamplePage() {
             </Button>
           </Link>
         </header>
+
+        {/* ═════════ STEP 6 — Zustand 토스트 시연 ═════════ */}
+        <GroupHeading
+          badge="STEP 6 · INFRA — Zustand store"
+          title="Toaster (글로벌 토스트)"
+          hint="useUIStore.pushToast 호출 → Toaster 자동 표시 + 3초 자동 dismiss"
+          tone="primary"
+        />
+        <ToastDemo />
+
+
 
         {/* ═════════ STEP 5 · LAYER 1 (5개 신규) ═════════ */}
         <GroupHeading
