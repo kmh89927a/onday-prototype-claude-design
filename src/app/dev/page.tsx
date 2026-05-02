@@ -6,17 +6,25 @@ import {
   ArrowRight,
   Calendar,
   Check,
+  ChevronLeft,
+  Heart,
   Link as LinkIcon,
   MapPin,
   Maximize2,
+  Menu,
+  Plus,
   RefreshCw,
   Search,
   Share2,
   User,
+  X,
 } from "lucide-react";
 
+import { Stat } from "@/components/data/stat";
+import { PhoneFrame } from "@/components/layout/phone-frame";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
 import {
   Card,
   CardContent,
@@ -49,6 +57,7 @@ import {
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 function CheckList({ items }: { items: string[] }) {
   return (
@@ -66,12 +75,14 @@ function CheckList({ items }: { items: string[] }) {
 }
 
 function Section({
+  prefix = "B",
   index,
   title,
   hint,
   children,
   checks,
 }: {
+  prefix?: string;
   index: number;
   title: string;
   hint?: string;
@@ -82,7 +93,7 @@ function Section({
     <section className="space-y-s-3">
       <header>
         <p className="text-caption-xs font-bold tracking-wide text-ink-3">
-          SECTION {index.toString().padStart(2, "0")}
+          {prefix} {index.toString().padStart(2, "0")}
         </p>
         <h2 className="text-h3 text-ink">{title}</h2>
         {hint && <p className="mt-s-1 text-body-sm text-ink-3">{hint}</p>}
@@ -90,6 +101,33 @@ function Section({
       <div className="space-y-s-3">{children}</div>
       <CheckList items={checks} />
     </section>
+  );
+}
+
+function GroupHeading({
+  badge,
+  title,
+  hint,
+  tone = "primary",
+}: {
+  badge: string;
+  title: string;
+  hint?: string;
+  tone?: "primary" | "muted";
+}) {
+  return (
+    <div className="space-y-s-1 border-y border-line-2 py-s-3">
+      <p
+        className={cn(
+          "text-caption-xs font-bold tracking-widest",
+          tone === "primary" ? "text-primary" : "text-ink-3",
+        )}
+      >
+        {badge}
+      </p>
+      <h2 className="text-h3 text-ink">{title}</h2>
+      {hint && <p className="text-body-sm text-ink-3">{hint}</p>}
+    </div>
   );
 }
 
@@ -102,14 +140,15 @@ export default function DevSamplePage() {
       <div className="mx-auto max-w-md space-y-s-7 pb-s-10">
         {/* ───────── 헤더 ───────── */}
         <header className="space-y-s-2">
-          <div className="flex items-center gap-s-2">
+          <div className="flex flex-wrap items-center gap-s-2">
             <Badge variant="solid">_dev</Badge>
             <Badge variant="ok">Step 4</Badge>
+            <Badge>Step 5 · L1 (5/31)</Badge>
           </div>
           <h1 className="text-h2 text-ink">시각 검증 페이지</h1>
           <p className="text-body-sm text-ink-3">
-            shadcn/ui 9개 컴포넌트 + 온데이 디자인 토큰 적용 결과를 한 화면에서
-            검토합니다.
+            Step 5 Layer 1 신규 5개 + Step 4 baseline 9개 컴포넌트를 한
+            화면에서 검토합니다.
           </p>
           <div className="rounded-md border border-line-2 bg-surface px-s-3 py-s-2 text-caption text-ink-3">
             상위 검증 포인트 — primary{" "}
@@ -123,6 +162,261 @@ export default function DevSamplePage() {
             </Button>
           </Link>
         </header>
+
+        {/* ═════════ STEP 5 · LAYER 1 (5개 신규) ═════════ */}
+        <GroupHeading
+          badge="STEP 5 · LAYER 1 — 5/31"
+          title="신규 커스텀 컴포넌트"
+          hint="components-spec §01/03/04/13/16 정확 적용"
+          tone="primary"
+        />
+
+        {/* L1-01 PhoneFrame */}
+        <Section
+          prefix="L1"
+          index={1}
+          title="PhoneFrame"
+          hint="데스크톱 폰 베젤 (375×780) · 모바일 풀스크린 폴백"
+          checks={[
+            "데스크톱(≥768): 검은 베젤 + 다이내믹 아일랜드 + 홈 인디케이터 + status bar 9:41",
+            "데스크톱: 그라디언트 배경(primary-soft → bg)",
+            "모바일(<768): 베젤 사라지고 풀스크린 (max-md: hidden)",
+            "베젤·island·home indicator는 aria-hidden / 메인은 <main role='main'>",
+            "screenBackground: surface | bg | soft 3종",
+          ]}
+        >
+          <p className="text-body-sm text-ink-3">
+            데스크톱에서 베젤 미리보기 (모바일에선 단순 wrapping):
+          </p>
+          <div className="overflow-hidden rounded-2xl border border-line-2">
+            <div className="scale-[0.55] origin-top-left h-[450px] w-[180%] -mb-[200px]">
+              <PhoneFrame screenLabel="diagnosis" screenBackground="bg">
+                <div className="space-y-s-3 p-s-5">
+                  <p className="text-caption-xs font-bold tracking-wide text-ink-3">
+                    STEP 1 / 2
+                  </p>
+                  <h3 className="text-h3 text-ink">
+                    두 분의 직장 주소를
+                    <br />
+                    알려주세요
+                  </h3>
+                  <p className="text-body-sm text-ink-3">
+                    입력한 주소는 분석 후 자동 삭제돼요
+                  </p>
+                  <div className="rounded-lg border border-card-border bg-surface p-s-4 text-body text-ink">
+                    내 직장: 서울 강남구 테헤란로 152
+                  </div>
+                </div>
+              </PhoneFrame>
+            </div>
+          </div>
+          <p className="text-caption text-ink-3">
+            ※ 실제 화면에서는 PhoneFrame이 페이지 전체를 감쌉니다. 여기서는 0.55
+            스케일 미리보기.
+          </p>
+        </Section>
+
+        {/* L1-02 IconButton */}
+        <Section
+          prefix="L1"
+          index={2}
+          title="IconButton"
+          hint="40×40 정사각 · plain / bordered · aria-label 필수"
+          checks={[
+            "size 40×40 / SVG 20px",
+            "plain: bg transparent + hover bg-bg",
+            "bordered: surface 흰 + 1px card-border",
+            "active 시 translateY(1px) · disabled opacity 0.4",
+            "aria-label로 스크린리더 접근 보장",
+          ]}
+        >
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">plain (transparent)</p>
+            <div className="flex flex-wrap gap-s-2">
+              <IconButton icon={<ChevronLeft />} ariaLabel="이전" />
+              <IconButton icon={<X />} ariaLabel="닫기" />
+              <IconButton icon={<Menu />} ariaLabel="메뉴" />
+              <IconButton icon={<Heart />} ariaLabel="즐겨찾기" />
+              <IconButton icon={<Plus />} ariaLabel="추가" disabled />
+            </div>
+          </div>
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">bordered (card-style)</p>
+            <div className="flex flex-wrap gap-s-2">
+              <IconButton
+                variant="bordered"
+                icon={<ChevronLeft />}
+                ariaLabel="이전"
+              />
+              <IconButton
+                variant="bordered"
+                icon={<RefreshCw />}
+                ariaLabel="새로고침"
+              />
+              <IconButton
+                variant="bordered"
+                icon={<Share2 />}
+                ariaLabel="공유"
+              />
+            </div>
+          </div>
+        </Section>
+
+        {/* L1-03 Button (ext) */}
+        <Section
+          prefix="L1"
+          index={3}
+          title="Button (ext)"
+          hint="leading / trailing / loading / fullWidth + size lg(44px single-foot)"
+          checks={[
+            "leading 슬롯 = 좌측 아이콘, trailing = 우측 아이콘",
+            "loading=true: leading이 spinner로 교체 + aria-busy + click 차단",
+            "fullWidth=true: 풀 너비 (100%)",
+            "size lg = 44px (single-foot 변형)",
+            "single-foot variant: lg + card border + shadow (single 페이지 footer)",
+          ]}
+        >
+          <div className="space-y-s-2">
+            <Button leading={<ArrowRight />} fullWidth>
+              leading 슬롯
+            </Button>
+            <Button trailing={<ArrowRight />} fullWidth>
+              trailing 슬롯
+            </Button>
+            <Button loading fullWidth>
+              로딩 중…
+            </Button>
+            <Button variant="outline" loading fullWidth>
+              outline 로딩
+            </Button>
+          </div>
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">size lg vs single-foot</p>
+            <div className="flex flex-wrap gap-s-2">
+              <Button size="lg">lg 44px</Button>
+              <Button size="lg" variant="outline">
+                lg outline
+              </Button>
+              <Button size="single-foot" leading={<RefreshCw />}>
+                single-foot
+              </Button>
+            </div>
+          </div>
+        </Section>
+
+        {/* L1-04 Pill / Badge (ext) */}
+        <Section
+          prefix="L1"
+          index={4}
+          title="Pill / Badge (ext)"
+          hint="size sm(default) / xs · leading slot 정식 지원"
+          checks={[
+            "size sm: 4/8 padding · 11px-700",
+            "size xs: 2/6 padding · 10px-700 (메타 라벨용)",
+            "leading prop으로 SVG 좌측 부착 (children 분리)",
+            "destructive 별칭 + grade-a~d 그대로 유지",
+          ]}
+        >
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">size sm (default)</p>
+            <div className="flex flex-wrap gap-s-2">
+              <Badge>BEST</Badge>
+              <Badge variant="ok" leading={<Check />}>
+                검증됨
+              </Badge>
+              <Badge variant="warning">매물 N건</Badge>
+              <Badge variant="danger">놓치면 위약금</Badge>
+            </div>
+          </div>
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">
+              size xs (메타 / 인라인 라벨)
+            </p>
+            <div className="flex flex-wrap gap-s-2">
+              <Badge size="xs" variant="neutral">
+                지하철역
+              </Badge>
+              <Badge size="xs" variant="neutral">
+                지역
+              </Badge>
+              <Badge size="xs" variant="neutral">
+                회사
+              </Badge>
+              <Badge size="xs" variant="default">
+                무료 미리보기
+              </Badge>
+            </div>
+          </div>
+        </Section>
+
+        {/* L1-05 Stat (Tile) */}
+        <Section
+          prefix="L1"
+          index={5}
+          title="Stat (Tile)"
+          hint="tile (bg-bg 작은 통계) · metric (가운데+좌측 보더 detail 전용)"
+          checks={[
+            "tile: bg-bg / radius 8 / padding 6/8 / label 10/600 ink-3 / value 12/800 ink",
+            "metric: 가운데 정렬 · 인접 시 좌측 보더(line-2) — 3등분 detail 사용",
+            "value는 tabular (표 숫자)",
+            "sub prop으로 단위 라벨 (84㎡ 등) 표시",
+            "<dl><dt><dd> 시맨틱 태그",
+          ]}
+        >
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">tile — 카드 내부 1/2 분할</p>
+            <div className="grid grid-cols-2 gap-s-2 rounded-lg border border-card-border bg-surface p-s-3 shadow-card">
+              <Stat label="A 통근" value="25분" />
+              <Stat label="B 통근" value="38분" />
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">tile — 3등분</p>
+            <div className="grid grid-cols-3 gap-s-2 rounded-lg border border-card-border bg-surface p-s-3 shadow-card">
+              <Stat label="평균 통근" value="31분" />
+              <Stat label="안전등급" value="B" />
+              <Stat label="평균 매가" value="9.2억" />
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">
+              metric — detail 페이지 3등분 (좌측 보더 자동)
+            </p>
+            <div className="flex rounded-lg border border-card-border bg-surface py-s-2 shadow-card">
+              <Stat
+                variant="metric"
+                label="면적"
+                value="84"
+                sub="㎡"
+                className="flex-1"
+              />
+              <Stat
+                variant="metric"
+                label="평균가"
+                value="9.2"
+                sub="억"
+                className="flex-1"
+              />
+              <Stat
+                variant="metric"
+                label="매물"
+                value="32"
+                sub="건"
+                className="flex-1"
+              />
+            </div>
+          </div>
+        </Section>
+
+        {/* ═════════ STEP 4 · BASELINE (9개 — 이전 검증 완료) ═════════ */}
+        <GroupHeading
+          badge="STEP 4 · BASELINE — 9 (이전 검증 완료)"
+          title="shadcn/ui 베이스 컴포넌트"
+          hint="Button / Input / Card / Badge / Tabs / Sheet / Dialog / Separator / Skeleton"
+          tone="muted"
+        />
 
         {/* ───────── 1. Button ───────── */}
         <Section
