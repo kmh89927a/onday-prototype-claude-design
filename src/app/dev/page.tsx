@@ -20,11 +20,25 @@ import {
   X,
 } from "lucide-react";
 
+import { CommuteChip } from "@/components/data/commute-chip";
+import { DataSourceBadge } from "@/components/data/data-source-badge";
+import { LegendBar } from "@/components/data/legend-bar";
+import { SafetyBar } from "@/components/data/safety-bar";
+import { SafetyGradeBadge } from "@/components/data/safety-grade-badge";
 import { Stat } from "@/components/data/stat";
+import {
+  AddressInput,
+  type AddressSuggestion,
+} from "@/components/form/address-input";
+import { FilterChip } from "@/components/form/filter-chip";
+import { ModeSelector, type ModeKey } from "@/components/form/mode-selector";
+import { TimeTabs } from "@/components/form/time-tabs";
 import { PhoneFrame } from "@/components/layout/phone-frame";
+import { StickyCTABar } from "@/components/layout/sticky-cta-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
+import { OAuthButton } from "@/components/ui/oauth-button";
 import {
   Card,
   CardContent,
@@ -131,9 +145,38 @@ function GroupHeading({
   );
 }
 
+const SUGGESTIONS_DEMO: AddressSuggestion[] = [
+  { id: "1", title: "판교역", sub: "경기 성남시 분당구", kind: "지하철역" },
+  {
+    id: "2",
+    title: "판교테크노밸리",
+    sub: "경기 성남시 분당구 삼평동",
+    kind: "지역",
+  },
+  {
+    id: "3",
+    title: "판교 N사옥",
+    sub: "경기 성남시 분당구 정자일로 95",
+    kind: "회사",
+  },
+];
+
+type TimeBucket = "07" | "08" | "09" | "10";
+const TIME_OPTIONS: { value: TimeBucket; label: string }[] = [
+  { value: "07", label: "07시" },
+  { value: "08", label: "08시" },
+  { value: "09", label: "09시" },
+  { value: "10", label: "10시" },
+];
+
 export default function DevSamplePage() {
   const [clicks, setClicks] = useState(0);
   const [name, setName] = useState("");
+  const [addrA] = useState("서울 강남구 테헤란로 152");
+  const [addrB, setAddrB] = useState("판교");
+  const [mode, setMode] = useState<ModeKey>("couple");
+  const [time, setTime] = useState<TimeBucket>("08");
+  const [budgetActive, setBudgetActive] = useState(false);
 
   return (
     <main className="min-h-screen bg-bg p-s-5">
@@ -144,11 +187,12 @@ export default function DevSamplePage() {
             <Badge variant="solid">_dev</Badge>
             <Badge variant="ok">Step 4</Badge>
             <Badge>Step 5 · L1 (5/31)</Badge>
+            <Badge>Step 5 · L2 (17/31)</Badge>
           </div>
           <h1 className="text-h2 text-ink">시각 검증 페이지</h1>
           <p className="text-body-sm text-ink-3">
-            Step 5 Layer 1 신규 5개 + Step 4 baseline 9개 컴포넌트를 한
-            화면에서 검토합니다.
+            Step 5 Layer 2 신규 12개 + Layer 1 5개 + Step 4 baseline 9개
+            컴포넌트를 한 화면에서 검토합니다.
           </p>
           <div className="rounded-md border border-line-2 bg-surface px-s-3 py-s-2 text-caption text-ink-3">
             상위 검증 포인트 — primary{" "}
@@ -408,6 +452,390 @@ export default function DevSamplePage() {
               />
             </div>
           </div>
+        </Section>
+
+        {/* ═════════ STEP 5 · LAYER 2 (12개 신규) ═════════ */}
+        <GroupHeading
+          badge="STEP 5 · LAYER 2 — 12/31"
+          title="도메인 형식·표시 컴포넌트"
+          hint="OAuth · CTA · 주소 자동완성 · 모드 선택 · 시간 탭 · 필터 · 데이터 출처 · 안전등급 · 통근 · 막대"
+          tone="primary"
+        />
+
+        {/* L2-01 OAuthButton */}
+        <Section
+          prefix="L2"
+          index={1}
+          title="OAuthButton"
+          hint="login 전용 — Button(variant=provider) + 라벨 preset"
+          checks={[
+            "kakao = #FEE500 / #191919 + 라벨 '카카오로 1초 만에 시작'",
+            "naver = #03C75A / #FFFFFF + 라벨 '네이버로 시작'",
+            "fullWidth · aria-label 자동",
+            "loading=true 시 좌측 spinner",
+          ]}
+        >
+          <OAuthButton provider="kakao" />
+          <OAuthButton provider="naver" />
+          <OAuthButton provider="kakao" loading />
+        </Section>
+
+        {/* L2-02 StickyCTABar */}
+        <Section
+          prefix="L2"
+          index={2}
+          title="StickyCTABar"
+          hint="화면 하단 고정 CTA + hint · safe-area-inset-bottom 처리"
+          checks={[
+            "sticky bottom + 상단 line-2 보더 (bordered=true)",
+            "padding 12 20 24 + iOS 홈인디케이터 inset 추가",
+            "메인 CTA + 보조 hint 텍스트 가운데 정렬",
+            "<footer role='contentinfo'> 시맨틱",
+          ]}
+        >
+          <p className="text-caption text-ink-3">실제 화면에서는 페이지 하단에 고정. 여기선 인라인 미리보기:</p>
+          <div className="rounded-xl border border-line-2 bg-bg p-s-3">
+            <StickyCTABar
+              cta={
+                <Button fullWidth trailing={<ArrowRight />}>
+                  진단 시작
+                </Button>
+              }
+              hint="평균 분석 4초 · 후보 6~8개 동네 추천"
+            />
+          </div>
+        </Section>
+
+        {/* L2-03 AddressInput + L2-04 SuggestList */}
+        <Section
+          prefix="L2"
+          index={3}
+          title="AddressInput + SuggestList"
+          hint="진단 단계 주소 필드 + 자동완성 드롭다운 (combobox)"
+          checks={[
+            "tag A=primary, B=secondary 색 분리",
+            "verified=true 시 우측 그린 체크, 아니면 search 아이콘",
+            "focus 시 border-primary + 4px ring",
+            "SuggestList: role=listbox + ↑↓Enter Esc 키보드 네비게이션",
+            "highlighted 항목 bg-bg + aria-selected",
+          ]}
+        >
+          <AddressInput
+            tag="A"
+            label="내 직장"
+            value={addrA}
+            onChange={() => {}}
+            verified
+          />
+          <AddressInput
+            tag="B"
+            label="배우자 직장"
+            value={addrB}
+            onChange={setAddrB}
+            placeholder="판교"
+            suggestions={
+              addrB.length > 0
+                ? SUGGESTIONS_DEMO.filter((s) =>
+                    s.title.includes(addrB) || s.sub.includes(addrB),
+                  )
+                : []
+            }
+            onSelect={(s) => setAddrB(s.title)}
+          />
+          <p className="text-caption text-ink-3">
+            ※ 두 번째 필드에서 입력 후 Tab/↑↓ 로 자동완성 동작 확인
+          </p>
+        </Section>
+
+        {/* L2-05 ModeSelector */}
+        <Section
+          prefix="L2"
+          index={4}
+          title="ModeSelector"
+          hint="진단 모드 라디오 그룹 — 2칸 카드 그리드"
+          checks={[
+            "role=radiogroup + role=radio + aria-checked",
+            "active: border-primary + bg-primary-soft + 우상단 18px 체크",
+            "키보드 ←→ 이동 + Space/Enter 선택",
+            "emoji는 aria-hidden / title이 의미 전달",
+          ]}
+        >
+          <ModeSelector value={mode} onChange={setMode} />
+          <p className="text-caption text-ink-3">
+            현재 모드:{" "}
+            <span className="font-bold text-ink">
+              {mode === "couple" ? "커플" : mode === "single" ? "싱글" : "룸메이트"}
+            </span>
+          </p>
+        </Section>
+
+        {/* L2-06 TimeTabs */}
+        <Section
+          prefix="L2"
+          index={5}
+          title="TimeTabs"
+          hint="result 출근시간대 선택 — segmented 4개"
+          checks={[
+            "container bg-bg + 3px padding + radius 10px",
+            "active tab: 흰 배경 + shadow-sm",
+            "옵션 ≥5면 가로 스크롤 + scroll-snap",
+            "role=tablist 키보드 ←→ 이동",
+          ]}
+        >
+          <TimeTabs
+            value={time}
+            onChange={setTime}
+            options={TIME_OPTIONS}
+            ariaLabel="출근 시간대"
+          >
+            <div className="rounded-md bg-surface-soft p-s-3 text-body-sm text-ink-2">
+              <p className="text-caption-xs text-ink-3">선택된 시간대</p>
+              <p className="tabular text-h3 text-ink">
+                {time}시 출근 — 후보 6개
+              </p>
+            </div>
+          </TimeTabs>
+        </Section>
+
+        {/* L2-07 FilterChip */}
+        <Section
+          prefix="L2"
+          index={6}
+          title="FilterChip"
+          hint="라벨 + 값 필터 칩 · active 시 border-primary"
+          checks={[
+            "default: 흰 배경 + card-border",
+            "active: border-primary + value 색 primary",
+            "hover bg-bg, focus ring",
+            "aria-label='{label} 필터, 현재값 {value}'",
+          ]}
+        >
+          <div className="flex gap-s-2">
+            <FilterChip label="통근시간" value="60분 이내" />
+            <FilterChip
+              label="예산"
+              value={budgetActive ? "8억 이하" : "전체"}
+              active={budgetActive}
+              onClick={() => setBudgetActive((v) => !v)}
+            />
+          </div>
+          <p className="text-caption text-ink-3">
+            예산 칩 클릭 → active 토글 (border 색 변화)
+          </p>
+        </Section>
+
+        {/* L2-08 DataSourceBadge */}
+        <Section
+          prefix="L2"
+          index={7}
+          title="DataSourceBadge"
+          hint="share hero 데이터 출처 — kind dot color (official/aggregated/estimate)"
+          checks={[
+            "official(녹) / aggregated(파) / estimate(노) dot",
+            "어두운 hero 위: bg-white/15 + backdrop-blur",
+            "라이트 배경: bg-bg + line-2 보더",
+            "role='img' + aria-label 종합 (출처+갱신일)",
+          ]}
+        >
+          <p className="mb-s-2 text-caption text-ink-3">on-dark (hero 위)</p>
+          <div className="rounded-xl bg-gradient-to-br from-primary-deep to-primary p-s-4">
+            <div className="flex flex-wrap gap-s-2">
+              <DataSourceBadge
+                kind="official"
+                source="공공데이터"
+                updatedAt="2026.04"
+              />
+              <DataSourceBadge
+                kind="aggregated"
+                source="카카오 모빌리티"
+                updatedAt="2026.04.01"
+              />
+              <DataSourceBadge kind="estimate" source="추정치" updatedAt="-" />
+            </div>
+          </div>
+          <p className="mt-s-3 mb-s-2 text-caption text-ink-3">on-light</p>
+          <div className="flex flex-wrap gap-s-2">
+            <DataSourceBadge
+              tone="on-light"
+              kind="official"
+              source="국토부 실거래가"
+              updatedAt="2026.04"
+            />
+            <DataSourceBadge
+              tone="on-light"
+              kind="aggregated"
+              source="TMAP API"
+              updatedAt="2026.04.01"
+            />
+          </div>
+        </Section>
+
+        {/* L2-09 SafetyGradeBadge */}
+        <Section
+          prefix="L2"
+          index={8}
+          title="SafetyGradeBadge"
+          hint="야간 안전 등급 — letter + label + 색 3중 표기"
+          checks={[
+            "A 매우 안전(녹) / B 안전(파) / C 주의(노) / D 위험(빨)",
+            "letter는 aria-hidden, role='img' + aria-label 종합",
+            "label 커스텀 가능 (default 매핑 사용)",
+          ]}
+        >
+          <div className="flex flex-wrap gap-s-2">
+            <SafetyGradeBadge grade="A" />
+            <SafetyGradeBadge grade="B" />
+            <SafetyGradeBadge grade="C" />
+            <SafetyGradeBadge grade="D" />
+          </div>
+        </Section>
+
+        {/* L2-10 CommuteChip */}
+        <Section
+          prefix="L2"
+          index={9}
+          title="CommuteChip"
+          hint="A/B 통근 시간 칩 · chip(컴팩트) / row(detail)"
+          checks={[
+            "tag A=primary, B=secondary 사각",
+            "mode 4종 아이콘 (지하철/버스/차량/도보)",
+            "chip: border line-2 + 컴팩트 / row: card-border + shadow + full width",
+            "aria-label='A 직장까지 지하철 18분, 환승 1회'",
+          ]}
+        >
+          <div>
+            <p className="mb-s-2 text-caption text-ink-3">chip 변형</p>
+            <div className="flex flex-wrap gap-s-2">
+              <CommuteChip tag="A" mode="subway" minutes={18} />
+              <CommuteChip tag="B" mode="bus" minutes={32} />
+              <CommuteChip tag="A" mode="car" minutes={25} />
+              <CommuteChip tag="B" mode="walk" minutes={42} />
+            </div>
+          </div>
+          <div className="space-y-s-2">
+            <p className="text-caption text-ink-3">row 변형 (detail)</p>
+            <CommuteChip
+              tag="A"
+              mode="subway"
+              minutes={18}
+              detail="환승 1회"
+              variant="row"
+            />
+            <CommuteChip
+              tag="B"
+              mode="bus"
+              minutes={32}
+              detail="환승 2회"
+              variant="row"
+            />
+          </div>
+        </Section>
+
+        {/* L2-11 LegendBar */}
+        <Section
+          prefix="L2"
+          index={10}
+          title="LegendBar"
+          hint="A~D 등급 가이드 4-col flex"
+          checks={[
+            "4개 등급 chip 균등 분배",
+            "각 chip = letter + label + 파스텔 색",
+            "title + meta (예: '22:00–04:00 · 반경 1km')",
+          ]}
+        >
+          <LegendBar
+            title="야간 안전 등급 기준"
+            meta="22:00–04:00 · 반경 1km"
+          />
+        </Section>
+
+        {/* L2-12 SafetyBar */}
+        <Section
+          prefix="L2"
+          index={11}
+          title="SafetyBar"
+          hint="값 + 4분위 tick + 등급별 fill 색 + IntersectionObserver 진입 애니메이션"
+          checks={[
+            "height 6px 고정 + radius xs",
+            "fill 색은 grade(A=녹, B=파, C=노, D=빨) 파스텔",
+            "4분위 tick (25/50/75) line-2",
+            "IntersectionObserver 진입 시 380ms ease-out 채움",
+            "role=progressbar + aria-valuenow + aria-label",
+          ]}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>야간 안전 지표 — 마포구 공덕동</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-s-3">
+              <SafetyBar
+                label="야간 범죄율 (10만명당)"
+                value={0.84}
+                unit="건"
+                percent={28}
+                grade="A"
+              />
+              <SafetyBar
+                label="가로등 밀도"
+                value={42}
+                unit="%"
+                percent={60}
+                grade="B"
+              />
+              <SafetyBar
+                label="유흥업소 비율"
+                value={12}
+                unit="%"
+                percent={75}
+                grade="C"
+              />
+              <SafetyBar
+                label="우범 신고 건수"
+                value={28}
+                unit="건"
+                percent={88}
+                grade="D"
+              />
+            </CardContent>
+          </Card>
+        </Section>
+
+        {/* L2-(추가) 통합 데모: 종합 placeholder */}
+        <Section
+          prefix="L2"
+          index={12}
+          title="통합 데모 (single 미리보기)"
+          hint="LegendBar + SafetyGradeBadge + SafetyBar + Stat 결합"
+          checks={[
+            "single 페이지 카드 구조 미리 보기",
+            "안전등급 우상단 + 본문 SafetyBar 다수 + 하단 Stat tile",
+          ]}
+        >
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between gap-s-2">
+                <div>
+                  <CardTitle>마포구 공덕동</CardTitle>
+                  <CardDescription>종합 안전 점수 88점</CardDescription>
+                </div>
+                <SafetyGradeBadge grade="B" />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-s-3">
+              <SafetyBar
+                label="야간 범죄율 (10만명당)"
+                value={0.84}
+                unit="건"
+                percent={32}
+                grade="A"
+              />
+              <div className="grid grid-cols-3 gap-s-2 rounded-md bg-bg p-s-2">
+                <Stat label="가로등" value="42" sub="%" />
+                <Stat label="우범 신고" value="28" sub="건" />
+                <Stat label="신뢰도" value="A" />
+              </div>
+            </CardContent>
+          </Card>
         </Section>
 
         {/* ═════════ STEP 4 · BASELINE (9개 — 이전 검증 완료) ═════════ */}
