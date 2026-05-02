@@ -15,6 +15,8 @@ export interface AddressSuggestion {
   title: string;
   sub: string;
   kind: "지하철역" | "지역" | "회사" | "도로명" | "지번";
+  /** 좌표 — 지오코딩 결과가 있을 때 onSelect 콜백을 통해 전달 */
+  coordinate?: { lat: number; lng: number };
 }
 
 interface SuggestListProps {

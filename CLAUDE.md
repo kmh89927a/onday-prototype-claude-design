@@ -57,17 +57,18 @@
 | 3 | Mock 인프라 (Prisma, API 4개, Haversine, Zustand, TanStack Query) | 완료 | `7ba116b` |
 | 4 | shadcn/ui base 9개 + onday 토큰 + Base UI data-props 호환 + 3폭 검증 페이지 | 완료 | `493e219` |
 | 5 | 31개 커스텀 컴포넌트 (5-Layer + primary-pastel 토큰) | 완료 | `d586380` |
-| 6 | /dev production 가드 + Zustand store 분리(session/favorites/ui) | 진행 중 |  |
+| 6 | /dev 가드 + Zustand 3 store 분리(session/favorites/ui) + Toaster 글로벌 | 완료 | `d1c6f0e` `db809fc` |
+| 7 | /login 페이지 + OAuth Mock + 게스트 체험 + Logo 컴포넌트 | 완료 | `3b6d701` |
+| 8 | /diagnosis 입력 페이지 + TimeRangeToggle + AddressInput 자동완성 + result placeholder | 완료 | (다음 commit) |
+| 9 | /diagnosis/result/[id] 결과 페이지 (CandidateCard + MapCanvas + FilterPanel 결합) | 다음 |  |
 
 ## 다음 시작 지점
-**Step 6**: 상태 관리 본 작업 — Zustand 3 store 분리
-- /dev production 가드 ✓ (`src/middleware.ts` — NODE_ENV=production 시 /dev/* → 404)
-- Zustand store 분리 (다음):
-  - `session` — 사용자 인증 / 게스트 모드 / 진단 입력 보존
-  - `favorites` — 저장한 동네 (CMD-SAVE-001 연계)
-  - `ui` — sheet open / filter panel state / 모달 등 UI 상태
-- Step 3에서 만든 zustand 1 store가 있을 가능성 → 분리 또는 신규 생성
-- TanStack Query와 역할 구분: server state는 TanStack, client state는 Zustand
+**Step 9**: `/diagnosis/result/[id]` 결과 페이지 본 구현 — 사전 점검부터 시작
+- 현재 placeholder 페이지: `src/app/diagnosis/result/[id]/page.tsx` (Server Component, ID 표시만)
+- API `/api/diagnosis` 응답 구조: `{ diagnosisId, candidates, timeline }` (Step 8에서 확인됨)
+- 활용 컴포넌트: `CandidateCard` (L4) · `MapCanvas` + `MapMarker` (L3) · `FilterPanel` (L5) · `TimeTabs` (L2 — 결과 단계 시간대 미세 조정)
+- 데이터 흐름: useDiagnosis(id) (TanStack query) → candidates 렌더 → useDiagnosisStore.setResult로 hydrate
+- 검토 항목: 정렬 옵션(점수/통근/시세) · 마커 클릭 ↔ 카드 sync · DetailSheet 연동(Step 10 예정)
 
 ## Step 12 직전 cleanup 예정 (P2/P3)
 - grade 파스텔 6색 → globals.css 토큰화 (현재 3개 파일에 hsl 인라인 중복)
@@ -77,3 +78,12 @@
 - 한글 인코딩: Write 후 반드시 `grep -rn $'\xef\xbf\xbd'` 로 검증
 - Prisma 7: `@/generated/prisma/client` 경로 사용 (index.ts 없음)
 - shadcn v4: `@base-ui/react` 사용 (Radix 아님), oklch 덮어쓰기 주의
+
+## webpack 청크 캐시 손상 패턴 (Step 6, Step 8 재발 확인)
+신규 라우트 + middleware/store 동시 추가 시 `.next/` 청크 그래프 stale.
+**증상**: `Cannot find module './XXX.js'` 런타임 에러 (`/login`, `/diagnosis` 등)
+**해결**: dev 서버 재시작 + 캐시 삭제 (1줄):
+```bash
+lsof -ti:3000 | xargs kill -9 2>/dev/null; rm -rf .next && npm run dev
+```
+**예방**: Step 단위 큰 변경(신규 페이지 + middleware/store) 후 dev 재시작 권장
