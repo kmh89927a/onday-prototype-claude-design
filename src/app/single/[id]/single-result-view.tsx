@@ -5,6 +5,8 @@ import { Filter, FileDown } from "lucide-react";
 
 import { SafetyCard } from "@/components/card/safety-card";
 import { LegendBar } from "@/components/data/legend-bar";
+import { DeadlineBanner } from "@/components/deadline/deadline-banner";
+import { DeadlineBell } from "@/components/deadline/deadline-bell";
 import { AppHeader } from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
@@ -108,9 +110,16 @@ export function SingleResultView({
 
   return (
     <main className="flex min-h-screen flex-col bg-bg">
-      <AppHeader backHref="/diagnosis" title="싱글 모드 결과" />
+      <AppHeader
+        backHref="/diagnosis"
+        title="싱글 모드 결과"
+        trailing={<DeadlineBell />}
+      />
 
       <div className="flex-1 px-s-5 pt-s-3 pb-s-8 space-y-s-4">
+        <div className="print:hidden">
+          <DeadlineBanner />
+        </div>
         <header className="flex items-start justify-between gap-s-3 print:hidden">
           <div>
             <p className="text-caption-xs font-bold tracking-wider text-primary">

@@ -4,15 +4,15 @@ import * as React from "react";
 import Link from "next/link";
 import {
   AlertCircle,
-  CalendarDays,
   ChevronLeft,
   Loader2,
   Share2,
 } from "lucide-react";
 
+import { DeadlineBanner } from "@/components/deadline/deadline-banner";
+import { DeadlineBell } from "@/components/deadline/deadline-bell";
 import { AppHeader } from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
-import { IconButton } from "@/components/ui/icon-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDiagnosis } from "@/features/diagnosis/use-diagnosis";
 import { copyToClipboard } from "@/lib/utils/clipboard";
@@ -87,11 +87,7 @@ export function ResultView({ id }: ResultViewProps) {
         title={headerTitle}
         trailing={
           <>
-            <IconButton
-              icon={<CalendarDays />}
-              ariaLabel="이사 데드라인"
-              href="/deadline"
-            />
+            <DeadlineBell />
             <Button
               variant="outline"
               size="sm"
@@ -111,6 +107,9 @@ export function ResultView({ id }: ResultViewProps) {
       />
 
       <div className="flex-1 px-s-5 pb-s-8 pt-s-3">
+        <div className="mb-s-3">
+          <DeadlineBanner />
+        </div>
         {isLoading ? (
           <ResultSkeleton />
         ) : error ? (
