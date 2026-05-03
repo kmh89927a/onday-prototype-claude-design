@@ -29,19 +29,20 @@
 - key 명시, React.memo (비용 큰 컴포넌트), useCallback (콜백)
 
 ## 디자인 보존 규칙
-- design-input/screens/*.html이 시각적 truth
-- 토큰명 design-tokens.md 그대로 유지
+- ../design-input/screens/*.html이 시각적 truth (onday-app/ 외부, claude-design/ 직속)
+- 토큰명 ../design-input/design-tokens.md 그대로 유지
 - 안전등급 뱃지: letter + label + 색 3중 표기
 - 포커스 링 2px brand + 2px offset 모든 인터랙티브 요소
 - prefers-reduced-motion 시 모든 애니메이션 0.01ms
 
 ## 자료 우선순위 (충돌 시)
+모든 경로는 `claude-design/` 기준 (onday-app/ 외부 = `../`).
 1. docs/05_SRS_v1.6.md
 2. wiki/concepts/architecture-patterns.md
 3. wiki/concepts/tech-stack.md
 4. docs/00_PRD_v1.1-rev.4.md
-5. tasks/
-6. design-input/
+5. ../tasks/  (UI-XXX.md, CMD-DIAG-*.md, API-*.md 등)
+6. ../design-input/  (screens/*.html · components-spec.md · design-tokens.md)
 
 ## Mock 모드
 - `NEXT_PUBLIC_USE_MOCK=true`로 모든 외부 의존성 Mock
