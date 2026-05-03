@@ -9,6 +9,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 45000,
     safetyGrade: "B",
     facilities: { convenience: 28, cafes: 45, schools: 3 },
+    lines: "1·3·5호선 환승 · 종각 도보권",
+    listingsCount: 78,
+    avgArea: 22,
   },
   {
     id: "mapo-gondeok",
@@ -18,6 +21,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 72000,
     safetyGrade: "A",
     facilities: { convenience: 22, cafes: 38, schools: 5 },
+    lines: "5·6호선 · 경의중앙선 · 공항철도 환승",
+    listingsCount: 124,
+    avgArea: 25,
   },
   {
     id: "gangnam-station",
@@ -27,6 +33,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 115000,
     safetyGrade: "A",
     facilities: { convenience: 35, cafes: 62, schools: 4 },
+    lines: "2호선 · 신분당선 · 강남 도보권",
+    listingsCount: 215,
+    avgArea: 28,
   },
   {
     id: "yongsan-itaewon",
@@ -36,6 +45,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 85000,
     safetyGrade: "B",
     facilities: { convenience: 18, cafes: 55, schools: 2 },
+    lines: "6호선 · 한남대로 광역버스",
+    listingsCount: 87,
+    avgArea: 24,
   },
   {
     id: "songpa-jamsil",
@@ -45,6 +57,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 130000,
     safetyGrade: "A",
     facilities: { convenience: 30, cafes: 42, schools: 7 },
+    lines: "2·8호선 환승 · 잠실역세권",
+    listingsCount: 198,
+    avgArea: 32,
   },
   {
     id: "yeongdeungpo-yeouido",
@@ -54,6 +69,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 105000,
     safetyGrade: "A",
     facilities: { convenience: 25, cafes: 48, schools: 3 },
+    lines: "5·9호선 · 여의나루 도보권",
+    listingsCount: 142,
+    avgArea: 30,
   },
   {
     id: "seodaemun-sinchon",
@@ -63,6 +81,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 52000,
     safetyGrade: "B",
     facilities: { convenience: 32, cafes: 58, schools: 4 },
+    lines: "2호선 · 경의중앙선 · 대학가",
+    listingsCount: 95,
+    avgArea: 19,
   },
   {
     id: "dongjak-sadang",
@@ -72,6 +93,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 68000,
     safetyGrade: "B",
     facilities: { convenience: 20, cafes: 25, schools: 6 },
+    lines: "2·4호선 환승 · 광역버스 환승센터",
+    listingsCount: 110,
+    avgArea: 25,
   },
   {
     id: "nowon-junggye",
@@ -81,6 +105,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 48000,
     safetyGrade: "B",
     facilities: { convenience: 24, cafes: 18, schools: 8 },
+    lines: "7호선 · 중계동 학원가",
+    listingsCount: 73,
+    avgArea: 28,
   },
   {
     id: "gwanak-bongcheon",
@@ -90,6 +117,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 42000,
     safetyGrade: "C",
     facilities: { convenience: 26, cafes: 22, schools: 5 },
+    lines: "2호선 · 광역버스 다수",
+    listingsCount: 68,
+    avgArea: 22,
   },
   {
     id: "seongdong-wangsimni",
@@ -99,6 +129,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 78000,
     safetyGrade: "A",
     facilities: { convenience: 21, cafes: 35, schools: 4 },
+    lines: "2·5호선 · 경의중앙선 · 분당선 4중 환승",
+    listingsCount: 134,
+    avgArea: 25,
   },
   {
     id: "yangcheon-mokdong",
@@ -108,6 +141,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 95000,
     safetyGrade: "A",
     facilities: { convenience: 28, cafes: 30, schools: 10 },
+    lines: "5호선 · 학군 도보권",
+    listingsCount: 156,
+    avgArea: 33,
   },
   // step-9.5: 서울 권역 다양성 확장 (강북/강서/동북/외곽 + 가격 3억~15억 + 안전 A~D)
   {
@@ -118,6 +154,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 50000,
     safetyGrade: "B",
     facilities: { convenience: 25, cafes: 35, schools: 3 },
+    lines: "1·7호선 · 가산디지털단지 IT 클러스터",
+    listingsCount: 88,
+    avgArea: 20,
   },
   {
     id: "dobong-chang",
@@ -127,6 +166,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 35000,
     safetyGrade: "B",
     facilities: { convenience: 22, cafes: 18, schools: 8 },
+    lines: "1·4호선 환승 · 동북부 광역버스",
+    listingsCount: 56,
+    avgArea: 28,
   },
   {
     id: "jungnang-myeonmok",
@@ -136,6 +178,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 40000,
     safetyGrade: "C",
     facilities: { convenience: 24, cafes: 20, schools: 7 },
+    lines: "7호선 · 마을버스 권역",
+    listingsCount: 49,
+    avgArea: 24,
   },
   {
     id: "gangseo-yeomchang",
@@ -145,6 +190,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 60000,
     safetyGrade: "A",
     facilities: { convenience: 20, cafes: 25, schools: 5 },
+    lines: "9호선 급행 · 강서 가양",
+    listingsCount: 92,
+    avgArea: 26,
   },
   {
     id: "eunpyeong-bulgwang",
@@ -154,6 +202,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 55000,
     safetyGrade: "B",
     facilities: { convenience: 23, cafes: 22, schools: 6 },
+    lines: "3·6호선 환승 · 은평 광역버스",
+    listingsCount: 64,
+    avgArea: 26,
   },
   {
     id: "seongbuk-seongshin",
@@ -163,6 +214,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 70000,
     safetyGrade: "A",
     facilities: { convenience: 30, cafes: 50, schools: 4 },
+    lines: "4호선 · 성북 대학가",
+    listingsCount: 81,
+    avgArea: 19,
   },
   {
     id: "gwangjin-gundae",
@@ -172,6 +226,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 80000,
     safetyGrade: "A",
     facilities: { convenience: 32, cafes: 55, schools: 4 },
+    lines: "2·7호선 환승 · 동부 대학가",
+    listingsCount: 119,
+    avgArea: 21,
   },
   {
     id: "gangbuk-mia",
@@ -181,6 +238,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 45000,
     safetyGrade: "C",
     facilities: { convenience: 21, cafes: 16, schools: 6 },
+    lines: "4호선 · 우이신설선",
+    listingsCount: 52,
+    avgArea: 25,
   },
   {
     id: "jongno-pyeongchang",
@@ -190,6 +250,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 145000,
     safetyGrade: "A",
     facilities: { convenience: 12, cafes: 14, schools: 3 },
+    lines: "시내버스 위주 · 광화문 직행",
+    listingsCount: 38,
+    avgArea: 35,
   },
   {
     id: "geumcheon-siheung",
@@ -199,6 +262,9 @@ export const MOCK_NEIGHBORHOODS: Neighborhood[] = [
     avgPrice: 32000,
     safetyGrade: "D",
     facilities: { convenience: 18, cafes: 12, schools: 5 },
+    lines: "1호선 도보 15분 · 광역버스 환승",
+    listingsCount: 41,
+    avgArea: 28,
   },
 ];
 
