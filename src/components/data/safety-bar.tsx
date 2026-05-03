@@ -10,11 +10,14 @@ import { type SafetyGrade } from "./safety-grade-badge";
 //   role=progressbar + aria-valuenow/min/max + aria-label
 //   애니메이션: IntersectionObserver 진입 시 380ms ease-out (--bar-target CSS var)
 
+// step-11.9 — onday 디자인 시스템 정렬:
+//   A·B = primary 톤 (조화), C·D = warning/danger 톤다운
+//   bar는 가독성 위해 opacity로 강도 조정 (badge보다 진한 톤)
 const FILL_COLORS: Record<SafetyGrade, string> = {
-  A: "bg-[hsl(156_72%_67%)]",
-  B: "bg-[hsl(213_93%_78%)]",
-  C: "bg-[hsl(48_94%_76%)]",
-  D: "bg-[hsl(0_94%_82%)]",
+  A: "bg-primary",
+  B: "bg-primary/55",
+  C: "bg-warning/70",
+  D: "bg-danger/70",
 };
 
 interface SafetyBarProps {

@@ -117,7 +117,11 @@ export function ResultView({ id }: ResultViewProps) {
         ) : showEmpty ? (
           <EmptyState />
         ) : (
-          <ResultContent candidates={candidates} filters={filters} />
+          <ResultContent
+            candidates={candidates}
+            filters={filters}
+            onShare={handleShare}
+          />
         )}
       </div>
     </main>
@@ -130,8 +134,8 @@ function ResultSkeleton() {
       <Skeleton className="h-9 w-full" />
       <Skeleton className="h-[320px] w-full" />
       <Skeleton className="h-6 w-32" />
-      {[0, 1, 2].map((i) => (
-        <Skeleton key={i} className="h-[112px] w-full" />
+      {["card-1", "card-2", "card-3"].map((id) => (
+        <Skeleton key={id} className="h-[112px] w-full" />
       ))}
     </div>
   );

@@ -83,9 +83,9 @@ export function CandidateCard({
       </header>
 
       <div className="flex flex-wrap gap-s-2">
-        {commutes.map((c, i) => (
+        {commutes.map((c) => (
           <CommuteChip
-            key={i}
+            key={c.tag}
             tag={c.tag}
             mode={c.mode}
             minutes={c.minutes}

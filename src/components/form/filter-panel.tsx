@@ -48,8 +48,8 @@ export function FilterPanel<T extends string>({
       />
       <div className="flex items-center gap-s-2">
         <div className="flex flex-1 gap-s-2">
-          {filters.map((f, i) => (
-            <FilterChip key={i} {...f} />
+          {filters.map((f) => (
+            <FilterChip key={f.value} {...f} />
           ))}
         </div>
         {onOpenAdvanced && (

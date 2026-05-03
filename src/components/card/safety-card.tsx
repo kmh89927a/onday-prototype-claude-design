@@ -39,6 +39,10 @@ export function SafetyCard({
   className,
 }: SafetyCardProps) {
   const interactive = Boolean(href || onClick);
+  // 종합 aria-label (스크린리더): 동네 + 등급 + 핵심 지표
+  const ariaLabel = `${name}, ${gradeLabel}, ${metric.label} ${metric.value}${
+    metric.unit ?? ""
+  }`;
 
   const inner = (
     <>
@@ -59,8 +63,8 @@ export function SafetyCard({
       />
 
       <div className="grid grid-cols-3 gap-s-2">
-        {stats.map((s, i) => (
-          <Stat key={i} label={s.label} value={s.value} sub={s.sub} />
+        {stats.map((s) => (
+          <Stat key={s.label} label={s.label} value={s.value} sub={s.sub} />
         ))}
       </div>
     </>
@@ -75,17 +79,26 @@ export function SafetyCard({
 
   if (href) {
     return (
-      <a href={href} className={baseClass}>
+      <a href={href} aria-label={ariaLabel} className={baseClass}>
         {inner}
       </a>
     );
   }
   if (onClick) {
     return (
-      <button type="button" onClick={onClick} className={baseClass}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={ariaLabel}
+        className={baseClass}
+      >
         {inner}
       </button>
     );
   }
-  return <article className={baseClass}>{inner}</article>;
+  return (
+    <article aria-label={ariaLabel} className={baseClass}>
+      {inner}
+    </article>
+  );
 }

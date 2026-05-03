@@ -42,9 +42,14 @@ const TIME_OPTIONS: { value: string; label: string }[] = [
 interface ResultContentProps {
   candidates: CandidateArea[];
   filters: DiagnosisFilters;
+  onShare: () => void | Promise<void>;
 }
 
-export function ResultContent({ candidates, filters }: ResultContentProps) {
+export function ResultContent({
+  candidates,
+  filters,
+  onShare,
+}: ResultContentProps) {
   const searchParams = useSearchParams();
   const sort = parseSortKey(searchParams.get("sort"));
   const pushToast = useUIStore((s) => s.pushToast);
@@ -190,13 +195,7 @@ export function ResultContent({ candidates, filters }: ResultContentProps) {
           }}
           liked={Boolean(favorites[selectedCandidate.id])}
           onLike={handleLike}
-          onShare={() => {
-            setOpenId(null);
-            pushToast({
-              variant: "default",
-              message: "헤더의 공유 버튼을 사용해주세요",
-            });
-          }}
+          onShare={onShare}
           commuteExtra={
             <TimeSlotSelector value={timeSlot} onChange={handleTimeSlotChange} />
           }

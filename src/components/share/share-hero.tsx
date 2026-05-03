@@ -63,9 +63,9 @@ export function ShareHero({
       </h1>
       {badges.length > 0 && (
         <div className="mt-s-4 flex flex-wrap gap-s-2">
-          {badges.map((b, i) => (
+          {badges.map((b) => (
             <DataSourceBadge
-              key={i}
+              key={`${b.kind}-${b.source}`}
               kind={b.kind}
               source={b.source}
               updatedAt={b.updatedAt}

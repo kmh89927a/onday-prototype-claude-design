@@ -4,15 +4,17 @@ import { cn } from "@/lib/utils";
 
 // components-spec §15 SafetyGradeBadge
 //   야간 안전 등급(A~D). letter + label + 색 3중 표기 (color 단독 금지)
-//   파스텔 — design-tokens §1.7
+//   onday 디자인 시스템 정렬 (step-11.9):
+//     A·B = primary 파스텔/소프트 (메인 안전, primary 시스템과 조화)
+//     C·D = warning/danger soft (경고/위험 인지, 톤다운)
 
 export type SafetyGrade = "A" | "B" | "C" | "D";
 
 const GRADE_STYLES: Record<SafetyGrade, string> = {
-  A: "bg-[hsl(152_76%_90%)] text-[hsl(161_94%_24%)]",
-  B: "bg-[hsl(213_97%_87%)] text-[hsl(224_76%_48%)]",
-  C: "bg-[hsl(48_96%_89%)] text-[hsl(35_92%_33%)]",
-  D: "bg-[hsl(0_93%_94%)] text-[hsl(0_74%_42%)]",
+  A: "bg-primary-pastel text-primary-deep",
+  B: "bg-primary-soft text-primary",
+  C: "bg-warning-soft text-warning",
+  D: "bg-danger-soft text-danger",
 };
 
 const GRADE_LABELS: Record<SafetyGrade, string> = {

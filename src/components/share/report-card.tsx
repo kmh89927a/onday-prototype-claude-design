@@ -56,8 +56,8 @@ export function ReportCard({
       </header>
 
       <div className="grid grid-cols-2 gap-1.5">
-        {stats.map((s, i) => (
-          <Stat key={i} label={s.label} value={s.value} />
+        {stats.map((s) => (
+          <Stat key={s.label} label={s.label} value={s.value} />
         ))}
       </div>
     </article>

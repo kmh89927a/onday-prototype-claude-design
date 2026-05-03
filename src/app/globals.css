@@ -160,9 +160,16 @@
   }
 
   /* ───── Print (PDF save — /single, /share) ───── */
+  /* wiki/single-mode.md: window.print() + @media print, 라이브러리 0건 */
   @media print {
+    @page {
+      margin: 16mm 12mm;
+    }
     body {
       background: #fff;
+      color: #000;
+      /* Pretendard 폰트 명시 (한글 글꼴 보장) */
+      font-family: "Pretendard", system-ui, -apple-system, sans-serif;
     }
     .no-print {
       display: none !important;
@@ -172,6 +179,19 @@
     }
     .card {
       break-inside: avoid;
+    }
+    /* 카드/섹션 내부에서 페이지 분할 회피 */
+    article,
+    section[aria-label] {
+      break-inside: avoid;
+    }
+    /* 인쇄 시 link url 노출 회피 (modern print) */
+    a[href]::after {
+      content: none !important;
+    }
+    /* tabular 보장 (시세·점수 정렬) */
+    .tabular {
+      font-variant-numeric: tabular-nums;
     }
   }
 }

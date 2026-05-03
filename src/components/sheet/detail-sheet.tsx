@@ -105,8 +105,8 @@ export function DetailSheet({
           </div>
           {candidate.pills.length > 0 && (
             <div className="flex flex-wrap gap-s-2">
-              {candidate.pills.map((p, i) => (
-                <Badge key={i} variant={p.variant} size="xs">
+              {candidate.pills.map((p) => (
+                <Badge key={p.label} variant={p.variant} size="xs">
                   {p.label}
                 </Badge>
               ))}
@@ -116,9 +116,9 @@ export function DetailSheet({
         </header>
 
         <section aria-label="통근 정보" className="space-y-s-2">
-          {candidate.commutes.map((c, i) => (
+          {candidate.commutes.map((c) => (
             <div
-              key={i}
+              key={c.tag}
               role="group"
               aria-label={`${c.tag} 직장까지 ${c.modeLabel} ${c.minutes}분${
                 c.detail ? `, ${c.detail}` : ""
@@ -157,9 +157,9 @@ export function DetailSheet({
 
         {candidate.metrics.length > 0 && (
           <div className="flex rounded-lg border border-card-border bg-surface py-s-2 shadow-card">
-            {candidate.metrics.map((m, i) => (
+            {candidate.metrics.map((m) => (
               <Stat
-                key={i}
+                key={m.label}
                 variant="metric"
                 label={m.label}
                 value={m.value}
