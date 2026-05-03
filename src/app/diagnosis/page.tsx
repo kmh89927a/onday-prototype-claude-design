@@ -151,7 +151,7 @@ export default function DiagnosisPage() {
             onClick={() =>
               pushToast({
                 variant: "default",
-                message: "이전 조건 불러오기는 Step 12 예정",
+                message: "이전 조건 불러오기는 다음 업데이트에 추가됩니다 ✨",
               })
             }
           >

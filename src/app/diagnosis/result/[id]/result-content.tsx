@@ -97,14 +97,14 @@ export function ResultContent({
   const notifyComingSoon = (label: string) =>
     pushToast({
       variant: "default",
-      message: `${label} 변경은 곧 추가됩니다 (Step 12)`,
+      message: `${label} 변경은 다음 업데이트에 추가됩니다 ✨`,
     });
 
   const handleTimeSlotChange = (next: TimeSlot) => {
     setTimeSlot(next);
     pushToast({
       variant: "default",
-      message: `${next} 시간대 시뮬레이션은 Step 12 예정`,
+      message: `${next} 시간대 시뮬레이션은 다음 업데이트에 추가됩니다 ✨`,
     });
   };
 
@@ -204,11 +204,14 @@ export function ResultContent({
               ? `매물 ${selectedCandidate.listingsCount}건 보기`
               : "매물 보기",
             onClick: () => {
-              setOpenId(null);
-              pushToast({
-                variant: "default",
-                message: "매물 페이지는 Step 11 예정 (네이버 부동산 아웃링크)",
-              });
+              const query = encodeURIComponent(
+                `${selectedCandidate.gu} ${selectedCandidate.dong}`,
+              );
+              window.open(
+                `https://land.naver.com/?query=${query}`,
+                "_blank",
+                "noopener,noreferrer",
+              );
             },
           }}
         />

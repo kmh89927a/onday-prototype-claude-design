@@ -146,7 +146,7 @@ export function SingleResultView({
             onClick={() =>
               pushToast({
                 variant: "default",
-                message: "고급 필터는 Step 12 예정",
+                message: "고급 필터는 다음 업데이트에 추가됩니다 ✨",
               })
             }
           />
