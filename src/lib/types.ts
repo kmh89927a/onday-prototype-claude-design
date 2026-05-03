@@ -26,6 +26,9 @@ export interface CandidateArea {
   safetyGrade?: SafetyGrade;
   priceRange?: { min: number; max: number }; // KRW in 만원
   facilities?: { convenience: number; cafes: number; schools?: number };
+  lines?: string; // 지하철/버스 노선 요약 — step-10.5에서 22개 보강
+  listingsCount?: number; // 매물 건수 — step-10.5에서 보강
+  avgArea?: number; // 평균 평수 — step-10.5에서 보강
 }
 
 export interface DiagnosisFilters {
@@ -85,4 +88,7 @@ export interface Neighborhood {
   avgPrice: number; // 만원
   safetyGrade: SafetyGrade;
   facilities: { convenience: number; cafes: number; schools: number };
+  lines?: string; // 지하철/버스 노선 요약 — step-10.5에서 보강
+  listingsCount?: number; // 매물 건수 — step-10.5에서 보강
+  avgArea?: number; // 평균 평수 — step-10.5에서 보강
 }

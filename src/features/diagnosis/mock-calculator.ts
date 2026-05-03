@@ -99,6 +99,9 @@ async function computeOneCandidate(
         max: Math.round(neighborhood.avgPrice * 1.15),
       },
       facilities: neighborhood.facilities,
+      lines: neighborhood.lines,
+      listingsCount: neighborhood.listingsCount,
+      avgArea: neighborhood.avgArea,
     },
   };
 }

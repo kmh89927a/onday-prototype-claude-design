@@ -39,7 +39,10 @@ interface DetailSheetProps {
   onClose: () => void;
   candidate: DetailSheetCandidate;
   onLike?: () => void;
+  liked?: boolean;
   onShare?: () => void;
+  /** commute rows와 metrics 사이 inject (예: TimeSlotSelector) */
+  commuteExtra?: React.ReactNode;
   primaryCta: {
     label: string;
     href?: string;
@@ -53,7 +56,9 @@ export function DetailSheet({
   onClose,
   candidate,
   onLike,
+  liked,
   onShare,
+  commuteExtra,
   primaryCta,
 }: DetailSheetProps) {
   return (
@@ -79,8 +84,13 @@ export function DetailSheet({
             <div className="flex shrink-0 items-center gap-1">
               {onLike && (
                 <IconButton
-                  icon={<Heart />}
-                  ariaLabel="저장"
+                  icon={
+                    <Heart
+                      className={cn(liked && "fill-danger text-danger")}
+                    />
+                  }
+                  ariaLabel={liked ? "찜 해제" : "찜"}
+                  aria-pressed={liked}
                   onClick={onLike}
                 />
               )}
@@ -142,6 +152,8 @@ export function DetailSheet({
             </div>
           ))}
         </section>
+
+        {commuteExtra}
 
         {candidate.metrics.length > 0 && (
           <div className="flex rounded-lg border border-card-border bg-surface py-s-2 shadow-card">
