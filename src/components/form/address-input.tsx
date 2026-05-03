@@ -10,12 +10,21 @@ import { SuggestList, type AddressSuggestion } from "./suggest-list";
 export type { AddressSuggestion };
 
 // components-spec §07 AddressInput
-//   tag A/B (A=primary, B=secondary), label 외부, value/onChange,
+//   tag A/B (A=primary, B=secondary) + L1/L2 (싱글 모드 여가거점, ink-3 톤)
 //   suggestions 비면 SuggestList 미표시, verified=true → 우측 그린 체크
 //   focus: border-primary + box-shadow 0 0 0 4px rgba(37,99,235,0.10)
 
+type AddressInputTag = "A" | "B" | "L1" | "L2";
+
+const TAG_BG: Record<AddressInputTag, string> = {
+  A: "bg-primary",
+  B: "bg-secondary",
+  L1: "bg-ink-3",
+  L2: "bg-ink-3",
+};
+
 interface AddressInputProps {
-  tag: "A" | "B";
+  tag: AddressInputTag;
   label: string;
   value: string;
   onChange: (next: string) => void;
@@ -92,8 +101,9 @@ export function AddressInput({
           <span
             aria-hidden
             className={cn(
-              "inline-flex size-6 shrink-0 items-center justify-center rounded-sm text-caption-xs font-extrabold text-white",
-              tag === "A" ? "bg-primary" : "bg-secondary",
+              "inline-flex shrink-0 items-center justify-center rounded-sm text-caption-xs font-extrabold text-white",
+              tag.length > 1 ? "px-1.5 h-6" : "size-6",
+              TAG_BG[tag],
             )}
           >
             {tag}

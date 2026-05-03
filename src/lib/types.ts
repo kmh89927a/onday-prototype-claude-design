@@ -43,6 +43,11 @@ export interface DiagnosisInput {
   addressB?: string; // nullable for single mode
   coordinateA: Coordinate;
   coordinateB?: Coordinate;
+  // single 모드 여가거점 (Figma 비전 — 직장 + 여가 1·2)
+  leisureA?: string;
+  leisureCoordA?: Coordinate;
+  leisureB?: string;
+  leisureCoordB?: Coordinate;
   filters: DiagnosisFilters;
   mode: DiagnosisMode;
   deadlineDate?: string; // ISO date string

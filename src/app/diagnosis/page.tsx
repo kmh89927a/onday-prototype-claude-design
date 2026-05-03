@@ -47,10 +47,16 @@ export default function DiagnosisPage() {
   const addressB = useDiagnosisStore((s) => s.addressB);
   const coordinateA = useDiagnosisStore((s) => s.coordinateA);
   const coordinateB = useDiagnosisStore((s) => s.coordinateB);
+  const leisureA = useDiagnosisStore((s) => s.leisureA);
+  const leisureB = useDiagnosisStore((s) => s.leisureB);
+  const leisureCoordA = useDiagnosisStore((s) => s.leisureCoordA);
+  const leisureCoordB = useDiagnosisStore((s) => s.leisureCoordB);
   const mode = useDiagnosisStore((s) => s.mode);
   const filters = useDiagnosisStore((s) => s.filters);
   const setAddressA = useDiagnosisStore((s) => s.setAddressA);
   const setAddressB = useDiagnosisStore((s) => s.setAddressB);
+  const setLeisureA = useDiagnosisStore((s) => s.setLeisureA);
+  const setLeisureB = useDiagnosisStore((s) => s.setLeisureB);
   const setMode = useDiagnosisStore((s) => s.setMode);
   const setFilters = useDiagnosisStore((s) => s.setFilters);
   const setLoading = useDiagnosisStore((s) => s.setLoading);
@@ -59,11 +65,15 @@ export default function DiagnosisPage() {
   const pushToast = useUIStore((s) => s.pushToast);
   const createDiagnosis = useCreateDiagnosis();
 
-  // 사용자 typing 상태 — store와 분리해서 debounce 적용 (select 시에만 store 업데이트)
+  // typing 상태 — store와 분리해서 debounce 적용 (select 시 store 업데이트)
   const [queryA, setQueryA] = React.useState(addressA);
   const [queryB, setQueryB] = React.useState(addressB);
+  const [queryL1, setQueryL1] = React.useState(leisureA);
+  const [queryL2, setQueryL2] = React.useState(leisureB);
   const debouncedA = useDebounce(queryA, 240);
   const debouncedB = useDebounce(queryB, 240);
+  const debouncedL1 = useDebounce(queryL1, 240);
+  const debouncedL2 = useDebounce(queryL2, 240);
 
   const suggestionsA = React.useMemo(
     () => searchNeighborhoods(debouncedA),
@@ -73,17 +83,31 @@ export default function DiagnosisPage() {
     () => searchNeighborhoods(debouncedB),
     [debouncedB],
   );
+  const suggestionsL1 = React.useMemo(
+    () => searchNeighborhoods(debouncedL1),
+    [debouncedL1],
+  );
+  const suggestionsL2 = React.useMemo(
+    () => searchNeighborhoods(debouncedL2),
+    [debouncedL2],
+  );
 
   const timeRange: TimeRange =
     (filters.timeRange as TimeRange | undefined) ?? "morning";
   const setTimeRange = (next: TimeRange) =>
     setFilters({ ...filters, timeRange: next });
 
-  const requiresB = mode === "couple";
-  const verifiedA = Boolean(coordinateA && addressA === queryA && queryA.length > 0);
-  const verifiedB = Boolean(coordinateB && addressB === queryB && queryB.length > 0);
+  const isCouple = mode === "couple";
+  const isSingle = mode === "single";
+  const verifiedA = Boolean(
+    coordinateA && addressA === queryA && queryA.length > 0,
+  );
+  const verifiedB = Boolean(
+    coordinateB && addressB === queryB && queryB.length > 0,
+  );
+  // 여가거점은 선택 사항 — verified 검증은 진단 시작 차단용 X (입력 시 좌표 저장 검증만)
   const canSubmit =
-    verifiedA && (!requiresB || verifiedB) && !createDiagnosis.isPending;
+    verifiedA && (!isCouple || verifiedB) && !createDiagnosis.isPending;
 
   const handleSubmit = async () => {
     if (!canSubmit || !coordinateA) return;
@@ -91,17 +115,22 @@ export default function DiagnosisPage() {
     try {
       const data = await createDiagnosis.mutateAsync({
         addressA,
-        addressB: requiresB ? addressB : undefined,
+        addressB: isCouple ? addressB : undefined,
         coordinateA,
-        coordinateB: requiresB && coordinateB ? coordinateB : undefined,
+        coordinateB: isCouple && coordinateB ? coordinateB : undefined,
+        leisureA: isSingle && leisureA ? leisureA : undefined,
+        leisureCoordA:
+          isSingle && leisureCoordA ? leisureCoordA : undefined,
+        leisureB: isSingle && leisureB ? leisureB : undefined,
+        leisureCoordB:
+          isSingle && leisureCoordB ? leisureCoordB : undefined,
         mode,
         filters,
       });
       setResult(data.diagnosisId, data.candidates);
-      const target =
-        mode === "single"
-          ? `/single/${data.diagnosisId}`
-          : `/diagnosis/result/${data.diagnosisId}`;
+      const target = isSingle
+        ? `/single/${data.diagnosisId}`
+        : `/diagnosis/result/${data.diagnosisId}`;
       router.push(target);
     } catch (err) {
       const msg =
@@ -138,9 +167,19 @@ export default function DiagnosisPage() {
             STEP 1 / 2
           </p>
           <h1 className="text-h3 font-extrabold leading-tight tracking-[-0.03em] text-ink">
-            두 분의 직장 주소를
-            <br />
-            알려주세요
+            {isCouple ? (
+              <>
+                두 분의 직장 주소를
+                <br />
+                알려주세요
+              </>
+            ) : (
+              <>
+                직장과 여가 거점을
+                <br />
+                알려주세요
+              </>
+            )}
           </h1>
           <p className="text-body-sm text-ink-3">
             입력한 주소는 분석 후 자동 삭제돼요
@@ -161,7 +200,7 @@ export default function DiagnosisPage() {
               setQueryA(item.title);
             }}
           />
-          {requiresB && (
+          {isCouple && (
             <AddressInput
               tag="B"
               label="배우자 직장"
@@ -175,6 +214,40 @@ export default function DiagnosisPage() {
                 setQueryB(item.title);
               }}
             />
+          )}
+          {isSingle && (
+            <>
+              <AddressInput
+                tag="L1"
+                label="여가 거점 1 (선택)"
+                value={queryL1}
+                onChange={setQueryL1}
+                placeholder="자주 가는 동네/카페/체육관 등"
+                suggestions={suggestionsL1}
+                verified={Boolean(
+                  leisureCoordA && leisureA === queryL1 && queryL1.length > 0,
+                )}
+                onSelect={(item) => {
+                  setLeisureA(item.title, item.coordinate);
+                  setQueryL1(item.title);
+                }}
+              />
+              <AddressInput
+                tag="L2"
+                label="여가 거점 2 (선택)"
+                value={queryL2}
+                onChange={setQueryL2}
+                placeholder="두 번째 자주 가는 곳"
+                suggestions={suggestionsL2}
+                verified={Boolean(
+                  leisureCoordB && leisureB === queryL2 && queryL2.length > 0,
+                )}
+                onSelect={(item) => {
+                  setLeisureB(item.title, item.coordinate);
+                  setQueryL2(item.title);
+                }}
+              />
+            </>
           )}
         </section>
 
@@ -207,7 +280,11 @@ export default function DiagnosisPage() {
             진단 시작
           </Button>
         }
-        hint="평균 분석 시간 4초 · 후보 6~8개 동네 추천"
+        hint={
+          isSingle
+            ? "여가거점은 선택 — 입력 시 가산 점수 ↑"
+            : "평균 분석 시간 4초 · 후보 6~8개 동네 추천"
+        }
       />
     </main>
   );

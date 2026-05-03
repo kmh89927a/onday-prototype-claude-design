@@ -10,6 +10,10 @@ export const diagnosisInputSchema = z.object({
   addressB: z.string().optional(),
   coordinateA: coordinateSchema,
   coordinateB: coordinateSchema.optional(),
+  leisureA: z.string().optional(),
+  leisureCoordA: coordinateSchema.optional(),
+  leisureB: z.string().optional(),
+  leisureCoordB: coordinateSchema.optional(),
   filters: z.object({
     maxCommuteTime: z.number().min(10).max(120).optional(),
     budget: z
