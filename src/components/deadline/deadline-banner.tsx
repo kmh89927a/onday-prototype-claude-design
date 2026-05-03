@@ -19,23 +19,37 @@ export function DeadlineBanner() {
   const dismissKey = stageInfo
     ? `deadline-banner-${stageInfo.stage}-${deadlineDate?.slice(0, 10)}`
     : null;
-  const [dismissed, setDismissed] = React.useState(true);
 
-  React.useEffect(() => {
-    if (!dismissKey) {
-      setDismissed(false);
-      return;
-    }
-    const v = window.localStorage.getItem(dismissKey);
-    setDismissed(v === "1");
-  }, [dismissKey]);
+  // localStorage는 외부 store — useSyncExternalStore로 동기화하면
+  // React 19의 set-state-in-effect 규칙을 우회하면서 dismiss 상태가
+  // 다른 탭에서 바뀌어도 즉시 반영된다.
+  const subscribe = React.useCallback((onChange: () => void) => {
+    if (typeof window === "undefined") return () => {};
+    window.addEventListener("storage", onChange);
+    return () => window.removeEventListener("storage", onChange);
+  }, []);
+  const getSnapshot = React.useCallback(
+    () =>
+      dismissKey != null &&
+      typeof window !== "undefined" &&
+      window.localStorage.getItem(dismissKey) === "1",
+    [dismissKey],
+  );
+  const dismissed = React.useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    () => true, // SSR 시 banner 숨김(hydration 후 실제 값으로 교체)
+  );
 
   if (!stageInfo || dismissed) return null;
 
   const handleDismiss: React.MouseEventHandler = (e) => {
     e.stopPropagation();
-    if (dismissKey) window.localStorage.setItem(dismissKey, "1");
-    setDismissed(true);
+    if (dismissKey) {
+      window.localStorage.setItem(dismissKey, "1");
+      // storage 이벤트는 다른 탭만 호출 — 본인 탭 즉시 반영을 위해 강제 dispatch
+      window.dispatchEvent(new StorageEvent("storage"));
+    }
   };
 
   const tone = stageInfo.urgency;
