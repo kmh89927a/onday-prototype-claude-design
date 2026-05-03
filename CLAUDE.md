@@ -36,13 +36,17 @@
 - prefers-reduced-motion 시 모든 애니메이션 0.01ms
 
 ## 자료 우선순위 (충돌 시)
-모든 경로는 `claude-design/` 기준 (onday-app/ 외부 = `../`).
-1. docs/05_SRS_v1.6.md
-2. wiki/concepts/architecture-patterns.md
-3. wiki/concepts/tech-stack.md
-4. docs/00_PRD_v1.1-rev.4.md
+모든 경로는 onday-app/ 외부 (`../`) — claude-design/ 직속 또는 그 아래.
+1. ../docs/05_SRS_v1.6.md  (정본; tasks/docs/에 사본)
+2. ../my-동네궁합진단기-workbase/wiki/concepts/architecture-patterns.md
+3. ../my-동네궁합진단기-workbase/wiki/concepts/tech-stack.md
+4. ../docs/00_PRD_v1.1-rev.4.md
 5. ../tasks/  (UI-XXX.md, CMD-DIAG-*.md, API-*.md 등)
-6. ../design-input/  (screens/*.html · components-spec.md · design-tokens.md)
+6. ../design-input/  (screens/*.html · components-spec.md · design-tokens.md · interactions-spec.md)
+
+추가 wiki concepts (참고): deadline-mode, single-mode, share-link, two-route-intersection,
+persona-domain-flows, domain-dependencies, market-size, known-follow-ups, srs-v1.6-changes,
+task-domains-overview. 한국어 통합본은 `../my-동네궁합진단기-workbase/llm-wiki.ko.md`.
 
 ## Mock 모드
 - `NEXT_PUBLIC_USE_MOCK=true`로 모든 외부 의존성 Mock
