@@ -111,7 +111,7 @@ export function SingleResultView({
       <AppHeader backHref="/diagnosis" title="싱글 모드 결과" />
 
       <div className="flex-1 px-s-5 pt-s-3 pb-s-8 space-y-s-4">
-        <header className="flex items-start justify-between gap-s-3">
+        <header className="flex items-start justify-between gap-s-3 print:hidden">
           <div>
             <p className="text-caption-xs font-bold tracking-wider text-primary">
               싱글 모드 · {sorted.length}개 후보
@@ -134,7 +134,9 @@ export function SingleResultView({
           />
         </header>
 
-        <LayerToggle value={layer} onChange={setLayer} />
+        <div className="print:hidden">
+          <LayerToggle value={layer} onChange={setLayer} />
+        </div>
 
         <LegendBar title={legend.title} meta={legend.meta} />
 
@@ -168,12 +170,15 @@ export function SingleResultView({
           fullWidth
           variant="outline"
           leading={<FileDown />}
-          onClick={() =>
+          onClick={() => {
+            // wiki/concepts/single-mode.md — window.print() + @media print, 라이브러리 0건
             pushToast({
               variant: "default",
-              message: "PDF 리포트는 Step 11.6 예정",
-            })
-          }
+              message: "PDF로 저장하려면 인쇄 대화상자에서 'PDF로 저장' 선택",
+            });
+            window.requestAnimationFrame(() => window.print());
+          }}
+          className="print:hidden"
         >
           리포트 저장 (PDF)
         </Button>
