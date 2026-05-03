@@ -17,14 +17,14 @@ import {
 import type { CandidateArea, SafetyGrade } from "@/lib/types";
 import { useUIStore } from "@/stores/ui";
 
+import { LayerToggle, type SingleLayer } from "./layer-toggle";
+
 interface SingleResultViewProps {
   id: string;
   addressA: string;
   candidates: CandidateArea[];
 }
 
-// safetyGrade가 없는 candidate는 mode='couple' 진단을 single 페이지로 본 경우.
-// fallback: 동네 ID 해시로 deterministic A~D 매핑 (실제는 single 모드 진단이어야 함)
 function fallbackGrade(c: CandidateArea): SafetyGrade {
   if (c.safetyGrade) return c.safetyGrade;
   const sum = c.id.split("").reduce((a, ch) => a + ch.charCodeAt(0), 0);
@@ -37,19 +37,74 @@ function priceText(c: CandidateArea): string {
   return `${(avg / 10000).toFixed(1)}억`;
 }
 
+const GRADE_ORDER: Record<SafetyGrade, number> = { A: 0, B: 1, C: 2, D: 3 };
+
+function sortByLayer(
+  list: CandidateArea[],
+  layer: SingleLayer,
+): CandidateArea[] {
+  const arr = [...list];
+  switch (layer) {
+    case "safety":
+      return arr.sort(
+        (a, b) => GRADE_ORDER[fallbackGrade(a)] - GRADE_ORDER[fallbackGrade(b)],
+      );
+    case "convenience":
+      return arr.sort(
+        (a, b) =>
+          (b.facilities?.convenience ?? 0) - (a.facilities?.convenience ?? 0),
+      );
+    case "cafes":
+      return arr.sort(
+        (a, b) => (b.facilities?.cafes ?? 0) - (a.facilities?.cafes ?? 0),
+      );
+  }
+}
+
+function buildLayerStat(c: CandidateArea, layer: SingleLayer) {
+  switch (layer) {
+    case "safety": {
+      const grade = fallbackGrade(c);
+      return { label: "범죄", value: `${getNightCrimeRate(grade)}건` };
+    }
+    case "convenience":
+      return {
+        label: "편의점",
+        value: `${c.facilities?.convenience ?? 0}개`,
+      };
+    case "cafes":
+      return { label: "카페", value: `${c.facilities?.cafes ?? 0}개` };
+  }
+}
+
+const LEGEND_META: Record<SingleLayer, { title: string; meta: string }> = {
+  safety: {
+    title: "야간 안전 등급 기준",
+    meta: "22:00–04:00 · 반경 1km",
+  },
+  convenience: {
+    title: "편의시설 밀집도 기준",
+    meta: "편의점 + 약국 + 24시간 매장 · 반경 1km",
+  },
+  cafes: {
+    title: "카페 밀집도 기준",
+    meta: "스타벅스급 + 개인 카페 · 반경 1km",
+  },
+};
+
 export function SingleResultView({
   addressA,
   candidates,
 }: SingleResultViewProps) {
   const pushToast = useUIStore((s) => s.pushToast);
+  const [layer, setLayer] = React.useState<SingleLayer>("safety");
 
-  // 야간 안전 우선 정렬 (A → D)
-  const sorted = React.useMemo(() => {
-    const order: Record<SafetyGrade, number> = { A: 0, B: 1, C: 2, D: 3 };
-    return [...candidates].sort(
-      (a, b) => order[fallbackGrade(a)] - order[fallbackGrade(b)],
-    );
-  }, [candidates]);
+  const sorted = React.useMemo(
+    () => sortByLayer(candidates, layer),
+    [candidates, layer],
+  );
+
+  const legend = LEGEND_META[layer];
 
   return (
     <main className="flex min-h-screen flex-col bg-bg">
@@ -73,21 +128,17 @@ export function SingleResultView({
             onClick={() =>
               pushToast({
                 variant: "default",
-                message: "Layer 토글은 Step 11.5 예정",
+                message: "고급 필터는 Step 12 예정",
               })
             }
           />
         </header>
 
-        <LegendBar
-          title="야간 안전 등급 기준"
-          meta="22:00–04:00 · 반경 1km"
-        />
+        <LayerToggle value={layer} onChange={setLayer} />
 
-        <section
-          aria-label="후보 동네"
-          className="space-y-s-3"
-        >
+        <LegendBar title={legend.title} meta={legend.meta} />
+
+        <section aria-label="후보 동네" className="space-y-s-3">
           {sorted.map((c) => {
             const grade = fallbackGrade(c);
             return (
@@ -106,10 +157,7 @@ export function SingleResultView({
                 stats={[
                   { label: "통근", value: `${c.commuteA.time}분` },
                   { label: "시세", value: priceText(c) },
-                  {
-                    label: "범죄",
-                    value: `${getNightCrimeRate(grade)}건`,
-                  },
+                  buildLayerStat(c, layer),
                 ]}
               />
             );
