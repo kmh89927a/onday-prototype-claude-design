@@ -51,12 +51,10 @@ export function MapCanvas({
     >
       {placeholder && (
         <svg
-          aria-hidden
           viewBox="0 0 375 320"
           preserveAspectRatio="xMidYMid slice"
           className="absolute inset-0 h-full w-full"
         >
-          {/* grid */}
           <defs>
             <pattern
               id="map-grid"
@@ -72,14 +70,15 @@ export function MapCanvas({
               />
             </pattern>
           </defs>
-          <rect width="375" height="320" fill="url(#map-grid)" />
-          {/* 한강 (대각선 띠) */}
+          {/* 격자 + 한강 = 시각 장식, 스크린리더 무시 */}
+          <rect aria-hidden width="375" height="320" fill="url(#map-grid)" />
           <path
+            aria-hidden
             d="M -20 220 Q 90 180 180 200 T 400 180 L 400 250 Q 280 270 180 240 T -20 270 Z"
             fill="#B6D6F2"
             opacity="0.85"
           />
-          {/* 마커 */}
+          {/* 마커 = 시맨틱 (각 마커 g에 role=button + aria-label) */}
           {markers.map((m) => (
             <MapMarker
               key={m.id}

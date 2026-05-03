@@ -98,7 +98,11 @@ export default function DiagnosisPage() {
         filters,
       });
       setResult(data.diagnosisId, data.candidates);
-      router.push(`/diagnosis/result/${data.diagnosisId}`);
+      const target =
+        mode === "single"
+          ? `/single/${data.diagnosisId}`
+          : `/diagnosis/result/${data.diagnosisId}`;
+      router.push(target);
     } catch (err) {
       const msg =
         err instanceof Error ? err.message : "진단 요청에 실패했습니다";

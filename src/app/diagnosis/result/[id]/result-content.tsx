@@ -190,12 +190,13 @@ export function ResultContent({ candidates, filters }: ResultContentProps) {
           }}
           liked={Boolean(favorites[selectedCandidate.id])}
           onLike={handleLike}
-          onShare={() =>
+          onShare={() => {
+            setOpenId(null);
             pushToast({
               variant: "default",
-              message: "공유 링크는 Step 11 예정",
-            })
-          }
+              message: "헤더의 공유 버튼을 사용해주세요",
+            });
+          }}
           commuteExtra={
             <TimeSlotSelector value={timeSlot} onChange={handleTimeSlotChange} />
           }
@@ -203,11 +204,13 @@ export function ResultContent({ candidates, filters }: ResultContentProps) {
             label: selectedCandidate.listingsCount
               ? `매물 ${selectedCandidate.listingsCount}건 보기`
               : "매물 보기",
-            onClick: () =>
+            onClick: () => {
+              setOpenId(null);
               pushToast({
                 variant: "default",
-                message: "매물 페이지는 Step 11 예정",
-              }),
+                message: "매물 페이지는 Step 11 예정 (네이버 부동산 아웃링크)",
+              });
+            },
           }}
         />
       )}
