@@ -76,26 +76,41 @@ task-domains-overview. 한국어 통합본은 `../my-동네궁합진단기-workb
 | 11.8 | 여가거점 점수 계산 (mock-calculator + API forward) | 완료 | `3846fee` |
 | 11.10 | Deadline 인앱 알림 (DeadlineBell + DeadlineBanner) | 완료 | `94cf1c5` |
 | 11.9 | 디자인 큐레이션 (key 안정화 + a11y + print + 색 시스템 통합) | 완료 | `de5b78d` |
-| 12 | production 빌드 + Vercel 배포 + 라이브 URL | 다음 |  |
+| 12 | UX 정리(친화 문구·매물 외부 링크) + in-memory store + 루트 redirect + Vercel 배포 | 완료 | `3b0fbf5` `a5bee2a` `bda1188` `b7f78b6` |
+
+## 🚀 라이브 URL
+**https://onday-prototype-claude-design.vercel.app**
+- `/` → `/login` 자동 redirect
+- 로그인 → `/diagnosis` 진단 흐름 정상
+- mock 모드 (`NEXT_PUBLIC_USE_MOCK=true`), in-memory store
+- 베타 테스트 가능 수준
 
 ## 다음 시작 지점
-**Step 12**: production 빌드 검증 + Vercel 배포 — 사전 점검부터 시작
-- `npm run build` 통과 검증 (TypeScript strict + ESLint)
-- 환경 변수: `NEXT_PUBLIC_USE_MOCK`, `DATABASE_URL` (SQLite dev → Supabase PostgreSQL prod)
-- Vercel 프로젝트 연결 + 라이브 URL 발급
-- Lighthouse 점수 (성능/접근성/SEO/Best Practices)
-- 모바일 viewport(375px) 실기 검증
+**베타 운영 + 7주차 부트캠프 진도**
+- 친구 공유 → 베타 테스트 피드백 수집
+- 부트캠프 7주차(월요일) 진도 진행
+- Tier 2~5 강화는 9~12주차 일정에 맞춰
 
-## Step 12 cleanup 항목 (계속 추적)
-- ✅ ~~grade 파스텔 6색 → 토큰화~~ (step-11.9 완료 — primary-pastel/soft + warning-soft + danger-soft 통합)
-- ✅ ~~`key={i}` 9건 → 안정 키~~ (step-11.9 완료 — 자연 키 적용)
-- 잔존 `key={i}` (low-risk): `dev/page.tsx` (dev 페이지), `map-placeholder.tsx` (placeholder 자체)
-- 잔존 hsl 인라인: `button.tsx` / `mode-selector.tsx` 의 disabled 색 `hsl(220 30% 84%)` — 별도 token 검토
+### Step 13 후보 (운영 안정화 — 베타 피드백 후 우선순위 조정)
+- Supabase Postgres 연결 (in-memory → 영구 저장, share link 다중 세션 유지)
+  · `src/lib/db.ts` 인터페이스 그대로 두고 driver adapter로 교체
+  · `prisma/seed.ts`는 보존되어 있음 (Step 12에서 tsconfig exclude만 추가)
+- Lighthouse 측정 + 모바일 viewport(375px) 실기 검증
+- Sentry 연결 (`NEXT_PUBLIC_SENTRY_DSN`)
+- Kakao Map SDK 연결 (현재는 `MapPlaceholder`)
+
+## Step 12 잔여 cleanup (Step 13+)
+- 잔존 `key={i}` (low-risk): `dev/page.tsx`, `map-placeholder.tsx`
+- 잔존 hsl 인라인: `button.tsx` / `mode-selector.tsx`의 disabled `hsl(220 30% 84%)` — 별도 token 검토
+- `better-sqlite3` / `@prisma/adapter-better-sqlite3` 미사용 dep 정리 (Postgres 전환과 함께)
 
 ## 주의사항
 - 한글 인코딩: Write 후 반드시 `grep -rn $'\xef\xbf\xbd'` 로 검증
 - Prisma 7: `@/generated/prisma/client` 경로 사용 (index.ts 없음)
 - shadcn v4: `@base-ui/react` 사용 (Radix 아님), oklch 덮어쓰기 주의
+- **in-memory store는 `globalThis` 핀 필수** — Next.js dev HMR 시 모듈 재로딩으로 Map 초기화됨 (`src/lib/db.ts` 참고). Vercel warm 람다에서도 같은 인스턴스 재사용에 도움.
+- **`src/generated/prisma/`는 `.gitignore`** — 의존하는 파일은 `tsconfig exclude`로 빼야 Vercel 빌드 통과 (`prisma/seed.ts` 사례).
+- **React 19 ESLint 규칙**: `react-hooks/set-state-in-effect`가 useEffect → setState 패턴을 차단. localStorage 같은 외부 store는 `useSyncExternalStore`로 (`deadline-banner.tsx` 참고).
 
 ## webpack 청크 캐시 손상 패턴 (Step 6, Step 8 재발 확인)
 신규 라우트 + middleware/store 동시 추가 시 `.next/` 청크 그래프 stale.
