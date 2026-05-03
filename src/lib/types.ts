@@ -22,6 +22,9 @@ export interface CandidateArea {
   coordinate: Coordinate;
   commuteA: CommuteInfo;
   commuteB?: CommuteInfo; // nullable for single mode
+  // single 모드 여가거점까지의 통근 정보 (Figma 비전)
+  leisureA?: CommuteInfo;
+  leisureB?: CommuteInfo;
   score: number; // 0-100
   safetyGrade?: SafetyGrade;
   priceRange?: { min: number; max: number }; // KRW in 만원

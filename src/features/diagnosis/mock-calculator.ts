@@ -1,33 +1,64 @@
-import type { CandidateArea, Coordinate, DiagnosisFilters, DiagnosisMode } from "@/lib/types";
-import { haversineDistance, estimateCommuteMinutes, estimateTransfers } from "@/lib/haversine";
+import type {
+  CandidateArea,
+  Coordinate,
+  DiagnosisFilters,
+  DiagnosisMode,
+} from "@/lib/types";
+import {
+  haversineDistance,
+  estimateCommuteMinutes,
+  estimateTransfers,
+} from "@/lib/haversine";
 import { MOCK_NEIGHBORHOODS } from "@/mocks/neighborhoods";
 
-function scoreCandiate(
-  neighborhood: (typeof MOCK_NEIGHBORHOODS)[number],
-  commuteA: number,
-  commuteB: number | null,
-  filters: DiagnosisFilters,
-): number {
+interface ScoreInput {
+  neighborhood: (typeof MOCK_NEIGHBORHOODS)[number];
+  commuteA: number;
+  commuteB: number | null;
+  leisureA: number | null;
+  leisureB: number | null;
+  filters: DiagnosisFilters;
+}
+
+// 여가거점 가산 (Figma 비전 — single 모드, 0~5점/거점)
+function leisureBonus(minutes: number | null): number {
+  if (minutes == null) return 0;
+  // 0분 → +5, 30분 → 0, 그 이상 → 0
+  return Math.max(0, 5 - minutes / 6);
+}
+
+function scoreCandidate({
+  neighborhood,
+  commuteA,
+  commuteB,
+  leisureA,
+  leisureB,
+  filters,
+}: ScoreInput): number {
   let score = 100;
 
-  // Commute time penalty (biggest factor)
+  // 통근 패널티 (가장 큰 요인)
   const avgCommute = commuteB != null ? (commuteA + commuteB) / 2 : commuteA;
   score -= Math.min(40, avgCommute * 0.8);
 
-  // Budget penalty
+  // 예산 초과 패널티
   if (filters.budget?.max && neighborhood.avgPrice > filters.budget.max) {
-    const overBudgetRatio = (neighborhood.avgPrice - filters.budget.max) / filters.budget.max;
+    const overBudgetRatio =
+      (neighborhood.avgPrice - filters.budget.max) / filters.budget.max;
     score -= Math.min(20, overBudgetRatio * 40);
   }
 
-  // Safety bonus
+  // 안전등급 가산
   const safetyBonus: Record<string, number> = { A: 10, B: 5, C: 0, D: -10 };
   score += safetyBonus[neighborhood.safetyGrade] ?? 0;
 
-  // Facilities bonus
+  // 편의시설 가산
   const facilityScore =
     (neighborhood.facilities.convenience + neighborhood.facilities.cafes) / 10;
   score += Math.min(10, facilityScore);
+
+  // 여가거점 가산 (single 모드 — Figma 비전)
+  score += leisureBonus(leisureA) + leisureBonus(leisureB);
 
   return Math.max(0, Math.min(100, Math.round(score)));
 }
@@ -45,14 +76,21 @@ interface ComputeError {
 
 type ComputeSettled = ComputeResult | ComputeError;
 
+interface ComputeArgs {
+  coordA: Coordinate;
+  coordB: Coordinate | null;
+  leisureCoordA: Coordinate | null;
+  leisureCoordB: Coordinate | null;
+  filters: DiagnosisFilters;
+  mode: DiagnosisMode;
+}
+
 async function computeOneCandidate(
   neighborhood: (typeof MOCK_NEIGHBORHOODS)[number],
-  coordA: Coordinate,
-  coordB: Coordinate | null,
-  filters: DiagnosisFilters,
-  mode: DiagnosisMode,
+  args: ComputeArgs,
 ): Promise<ComputeSettled> {
-  // Simulate async API delay (50-200ms)
+  const { coordA, coordB, leisureCoordA, leisureCoordB, filters, mode } = args;
+  // 비동기 API 지연 시뮬레이션 (50-200ms)
   await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
 
   const distA = haversineDistance(coordA, neighborhood.coordinate);
@@ -67,7 +105,22 @@ async function computeOneCandidate(
     transfersB = estimateTransfers(distB);
   }
 
-  // Filter by max commute time
+  let leisureA: number | null = null;
+  let leisureATransfers: number | undefined;
+  if (leisureCoordA) {
+    const dist = haversineDistance(leisureCoordA, neighborhood.coordinate);
+    leisureA = estimateCommuteMinutes(dist);
+    leisureATransfers = estimateTransfers(dist);
+  }
+  let leisureB: number | null = null;
+  let leisureBTransfers: number | undefined;
+  if (leisureCoordB) {
+    const dist = haversineDistance(leisureCoordB, neighborhood.coordinate);
+    leisureB = estimateCommuteMinutes(dist);
+    leisureBTransfers = estimateTransfers(dist);
+  }
+
+  // 통근 시간 상한 필터
   if (filters.maxCommuteTime) {
     const maxCommute = Math.max(commuteA, commuteB ?? 0);
     if (maxCommute > filters.maxCommuteTime) {
@@ -79,7 +132,14 @@ async function computeOneCandidate(
     }
   }
 
-  const score = scoreCandiate(neighborhood, commuteA, commuteB, filters);
+  const score = scoreCandidate({
+    neighborhood,
+    commuteA,
+    commuteB,
+    leisureA,
+    leisureB,
+    filters,
+  });
 
   return {
     status: "fulfilled",
@@ -92,6 +152,22 @@ async function computeOneCandidate(
       commuteB: coordB
         ? { time: commuteB!, mode: "transit", transfers: transfersB }
         : undefined,
+      leisureA:
+        leisureA != null
+          ? {
+              time: leisureA,
+              mode: "transit",
+              transfers: leisureATransfers,
+            }
+          : undefined,
+      leisureB:
+        leisureB != null
+          ? {
+              time: leisureB,
+              mode: "transit",
+              transfers: leisureBTransfers,
+            }
+          : undefined,
       score,
       safetyGrade: mode === "single" ? neighborhood.safetyGrade : undefined,
       priceRange: {
@@ -108,24 +184,37 @@ async function computeOneCandidate(
 
 /**
  * Mock diagnosis using Promise.allSettled pattern (Vercel timeout avoidance).
- * Computes commute times for all neighborhoods in parallel.
+ * Computes commute times + leisure distances for all neighborhoods in parallel.
  */
 export async function runMockDiagnosis(
   coordA: Coordinate,
   coordB: Coordinate | null,
   filters: DiagnosisFilters,
   mode: DiagnosisMode,
+  leisureCoordA: Coordinate | null = null,
+  leisureCoordB: Coordinate | null = null,
 ): Promise<CandidateArea[]> {
+  const args: ComputeArgs = {
+    coordA,
+    coordB,
+    leisureCoordA,
+    leisureCoordB,
+    filters,
+    mode,
+  };
   const results = await Promise.allSettled(
-    MOCK_NEIGHBORHOODS.map((n) => computeOneCandidate(n, coordA, coordB, filters, mode)),
+    MOCK_NEIGHBORHOODS.map((n) => computeOneCandidate(n, args)),
   );
 
   const candidates: CandidateArea[] = [];
   for (const result of results) {
-    if (result.status === "fulfilled" && result.value.status === "fulfilled") {
+    if (
+      result.status === "fulfilled" &&
+      result.value.status === "fulfilled"
+    ) {
       candidates.push(result.value.candidate);
     }
-    // Rejected items would go to Sentry in production
+    // rejected는 production에서 Sentry로
   }
 
   return candidates.sort((a, b) => b.score - a.score);

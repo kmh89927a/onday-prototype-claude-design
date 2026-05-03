@@ -27,6 +27,8 @@ export async function POST(request: Request) {
         input.coordinateB ?? null,
         input.filters,
         input.mode,
+        input.leisureCoordA ?? null,
+        input.leisureCoordB ?? null,
       );
 
       const diagnosis = await prisma.diagnosis.create({
