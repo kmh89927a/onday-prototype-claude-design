@@ -77,11 +77,13 @@ task-domains-overview. 한국어 통합본은 `../my-동네궁합진단기-workb
 | 11.10 | Deadline 인앱 알림 (DeadlineBell + DeadlineBanner) | 완료 | `94cf1c5` |
 | 11.9 | 디자인 큐레이션 (key 안정화 + a11y + print + 색 시스템 통합) | 완료 | `de5b78d` |
 | 12 | UX 정리(친화 문구·매물 외부 링크) + in-memory store + 루트 redirect + Vercel 배포 | 완료 | `3b0fbf5` `a5bee2a` `bda1188` `b7f78b6` |
+| 13 | /landing 랜딩페이지 (C유형 결과지향형: Hero+I/O+B&A+VP+SP+CTA) + 루트 redirect /landing | 완료 | — |
+| 13.5 | 랜딩페이지 v2 (비즈니스 브리프 전면 반영: Pain+학군+F1~F5+페르소나+시장) — 97% 달성 | 완료 | — |
 
 ## 🚀 라이브 URL
 **https://onday-prototype-claude-design.vercel.app**
-- `/` → `/login` 자동 redirect
-- 로그인 → `/diagnosis` 진단 흐름 정상
+- `/` → `/landing` 자동 redirect (Step 13 변경: 기존 `/login` → `/landing`)
+- 랜딩페이지 CTA → `/login` → `/diagnosis` 진단 흐름
 - mock 모드 (`NEXT_PUBLIC_USE_MOCK=true`), in-memory store
 - 베타 테스트 가능 수준
 
