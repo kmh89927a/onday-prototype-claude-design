@@ -12,6 +12,7 @@ import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, MotionConfig, useScroll, useTransform, useReducedMotion, useMotionValue, animate } from "framer-motion";
+import CountUp from "react-countup";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -73,6 +74,28 @@ const baItem = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
+
+function CountUpStat({ end, prefix = "", suffix = "", duration = 2 }: {
+  end: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+}) {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion || duration === 0) {
+    return <>{prefix}{end}{suffix}</>;
+  }
+  return (
+    <CountUp
+      end={end}
+      duration={duration}
+      prefix={prefix}
+      suffix={suffix}
+      enableScrollSpy
+      scrollSpyOnce
+    />
+  );
+}
 
 /* ── Hero ── */
 function HeroSection() {
@@ -316,7 +339,7 @@ function BeforeAfterSection() {
           </div>
           <motion.div variants={baItem} className="flex items-center justify-center gap-s-4 rounded-2xl bg-primary-soft/60 p-s-5">
             <div className="text-center">
-              <p className="text-display-2 font-extrabold text-primary tabular">98%</p>
+              <p className="text-display-2 font-extrabold text-primary tabular"><CountUpStat end={98} suffix="%" duration={2} /></p>
               <p className="text-caption text-ink-3">시간 절약</p>
             </div>
             <div aria-hidden className="h-10 w-px bg-line" />
@@ -428,13 +451,15 @@ function MarketSection() {
         </div>
         <div className="grid grid-cols-2 gap-s-3">
           {[
-            { value: "800만+", label: "연간 이사 가구", sub: "수도권 45%" },
-            { value: "$470억", label: "글로벌 프롭테크", sub: "CAGR 16%" },
-            { value: "0개", label: "직접 경쟁자", sub: "블루오션" },
-            { value: "6초", label: "AI 분석 시간", sub: "실시간 결과" },
+            { end: 800, prefix: "", suffix: "만+", duration: 2, label: "연간 이사 가구", sub: "수도권 45%" },
+            { end: 470, prefix: "$", suffix: "억", duration: 2, label: "글로벌 프롭테크", sub: "CAGR 16%" },
+            { end: 0, prefix: "", suffix: "개", duration: 0, label: "직접 경쟁자", sub: "블루오션" },
+            { end: 6, prefix: "", suffix: "초", duration: 1.5, label: "AI 분석 시간", sub: "실시간 결과" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col items-center gap-s-1 rounded-2xl border border-card-border bg-surface p-s-4 shadow-card">
-              <span className="text-h3 font-extrabold text-ink tabular">{s.value}</span>
+              <span className="text-h3 font-extrabold text-ink tabular">
+                <CountUpStat end={s.end} prefix={s.prefix} suffix={s.suffix} duration={s.duration} />
+              </span>
               <span className="text-caption font-medium text-ink-2">{s.label}</span>
               <span className="text-caption-xs text-ink-3">{s.sub}</span>
             </div>
