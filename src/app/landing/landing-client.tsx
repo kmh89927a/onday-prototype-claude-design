@@ -34,6 +34,36 @@ const cardFadeUpFast = {
   transition: { duration: 0.5, ease: "easeOut" as const },
 };
 
+const heroContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+};
+
+const ioContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.2 } },
+};
+
+const ioBox = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const, when: "beforeChildren" as const, staggerChildren: 0.08 } },
+};
+
+const ioBoxItem = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
+};
+
+const ioCenter = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" as const } },
+};
+
 /* ── Hero ── */
 function HeroSection() {
   const ref = React.useRef<HTMLElement>(null);
@@ -61,46 +91,63 @@ function HeroSection() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-xl md:max-w-2xl space-y-s-6">
-        <Logo size="lg" className="mx-auto" />
+      <motion.div
+        variants={heroContainer}
+        initial="hidden"
+        animate="visible"
+        className="mx-auto max-w-xl md:max-w-2xl space-y-s-6"
+      >
+        <motion.div variants={heroItem}>
+          <Logo size="lg" className="mx-auto" />
+        </motion.div>
 
         {/* 핵심 Pain 자극 뱃지 */}
-        <div className="mx-auto flex w-fit items-center gap-s-2 rounded-chip border border-warning/30 bg-warning-soft px-s-4 py-1.5">
+        <motion.div variants={heroItem} className="mx-auto flex w-fit items-center gap-s-2 rounded-chip border border-warning/30 bg-warning-soft px-s-4 py-1.5">
           <AlertTriangle className="size-3.5 text-warning" />
           <span className="text-caption-xs font-bold text-warning">이사 가구 연 800만 · 입지 실패 25%</span>
-        </div>
+        </motion.div>
 
-        <h1 className="text-display-2 font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-display-1 md:text-5xl lg:text-6xl">
-          주말 6시간 발품을,
-          <br />
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            6초 진단으로
-          </span>
-        </h1>
+        <motion.div variants={heroItem}>
+          <h1 className="text-display-2 font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-display-1 md:text-5xl lg:text-6xl">
+            주말 6시간 발품을,
+            <br />
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              6초 진단으로
+            </span>
+          </h1>
+        </motion.div>
 
-        <p className="mx-auto max-w-sm text-body-lg md:text-xl lg:text-2xl leading-relaxed text-ink-2">
-          복잡한 비교는 AI에게,
-          <br />
-          <strong className="text-ink">부부는 결정만.</strong>
-        </p>
+        <motion.div variants={heroItem}>
+          <p className="mx-auto max-w-sm text-body-lg md:text-xl lg:text-2xl leading-relaxed text-ink-2">
+            복잡한 비교는 AI에게,
+            <br />
+            <strong className="text-ink">부부는 결정만.</strong>
+          </p>
+        </motion.div>
 
-        <p className="mx-auto max-w-sm text-body-sm md:text-base lg:text-lg leading-relaxed text-ink-3">
-          남편 직장 + 아내 직장 + 아이 학군,
-          <br />
-          세 가지를 동시에 만족하는 동네를 찾아드려요.
-        </p>
+        <motion.div variants={heroItem}>
+          <p className="mx-auto max-w-sm text-body-sm md:text-base lg:text-lg leading-relaxed text-ink-3">
+            남편 직장 + 아내 직장 + 아이 학군,
+            <br />
+            세 가지를 동시에 만족하는 동네를 찾아드려요.
+          </p>
+        </motion.div>
 
         <div className="flex flex-col items-center gap-s-3 pt-s-2">
-          <Link href="/login" className="w-full max-w-xs">
-            <Button fullWidth size="lg" trailing={<ArrowRight />}>
-              지금 무료로 진단 시작하기
-            </Button>
-          </Link>
-          <p className="text-caption text-ink-3">
-            회원가입 없이 · 게스트 체험 가능 · 데이터 자동 삭제
-          </p>
+          <motion.div variants={heroItem} className="w-full max-w-xs">
+            <Link href="/login" className="block">
+              <Button fullWidth size="lg" trailing={<ArrowRight />}>
+                지금 무료로 진단 시작하기
+              </Button>
+            </Link>
+          </motion.div>
+          <motion.div variants={heroItem}>
+            <p className="text-caption text-ink-3">
+              회원가입 없이 · 게스트 체험 가능 · 데이터 자동 삭제
+            </p>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <button onClick={() => document.getElementById("pain")?.scrollIntoView({ behavior: "smooth" })} className="absolute bottom-8 animate-bounce text-ink-3 transition-colors hover:text-primary" aria-label="아래로 스크롤">
         <ChevronDown className="size-6" />
@@ -161,8 +208,14 @@ function InputOutputSection() {
           <p className="text-caption-xs font-bold tracking-widest text-primary">HOW IT WORKS</p>
           <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">복잡한 건 AI가,<br />결과만 확인하세요</h2>
         </div>
-        <div className="space-y-s-4">
-          <div className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card">
+        <motion.div
+          variants={ioContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="space-y-s-4"
+        >
+          <motion.div variants={ioBox} className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card">
             <p className="mb-s-3 text-caption font-bold text-ink-3">INPUT — 30초면 끝</p>
             <div className="flex items-center justify-center gap-s-3 flex-wrap">
               {[
@@ -170,22 +223,22 @@ function InputOutputSection() {
                 { icon: MapPin, label: "배우자 직장", color: "bg-[hsl(262_83%_95%)] text-secondary" },
                 { icon: GraduationCap, label: "아이 학군", color: "bg-warning-soft text-warning" },
               ].map((item) => (
-                <div key={item.label} className="flex flex-col items-center gap-s-1">
+                <motion.div variants={ioBoxItem} key={item.label} className="flex flex-col items-center gap-s-1">
                   <span className={cn("flex size-10 items-center justify-center rounded-xl", item.color.split(" ")[0])}>
                     <item.icon className={cn("size-5", item.color.split(" ")[1])} />
                   </span>
                   <span className="text-caption font-medium text-ink-2">{item.label}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
-          <div className="flex flex-col items-center gap-s-1">
+          </motion.div>
+          <motion.div variants={ioCenter} className="flex flex-col items-center gap-s-1">
             <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary shadow-marker">
               <Zap className="size-5 text-white" />
             </div>
             <span className="text-caption-xs font-bold text-primary">AI 동선 교차 분석 · 6초</span>
-          </div>
-          <div className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 shadow-card">
+          </motion.div>
+          <motion.div variants={ioBox} className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 shadow-card">
             <p className="mb-s-3 text-caption font-bold text-primary">OUTPUT</p>
             <div className="grid grid-cols-4 gap-s-2">
               {[
@@ -194,14 +247,14 @@ function InputOutputSection() {
                 { icon: TrendingUp, label: "시세·매물\n연결" },
                 { icon: GraduationCap, label: "학군·학원\n통합" },
               ].map(({ icon: Icon, label }) => (
-                <div key={label} className="flex flex-col items-center gap-s-1">
+                <motion.div variants={ioBoxItem} key={label} className="flex flex-col items-center gap-s-1">
                   <span className="flex size-9 items-center justify-center rounded-lg bg-surface shadow-card"><Icon className="size-4 text-primary" /></span>
                   <span className="whitespace-pre-line text-center text-caption-xs font-medium leading-snug text-ink-2">{label}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </motion.section>
   );
