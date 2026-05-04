@@ -176,7 +176,7 @@ function PainSection() {
         </div>
         <div className="space-y-s-3">
           {pains.map((p, i) => (
-            <motion.article {...cardFadeUpNormal} key={p.title} className="flex gap-s-4 rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
+            <motion.article key={p.title} {...cardFadeUpNormal} className="flex gap-s-4 rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-danger-soft">
                 <p.icon className="size-5 text-danger" />
               </span>
@@ -339,7 +339,7 @@ function ValueProposition() {
         </div>
         <div className="space-y-s-3">
           {features.map((f) => (
-            <motion.article {...cardFadeUpFast} key={f.title} className="group flex gap-s-4 rounded-2xl border border-card-border bg-surface p-s-5 shadow-card transition-shadow duration-220 hover:shadow-card-hover">
+            <motion.article key={f.title} {...cardFadeUpFast} className="group flex gap-s-4 rounded-2xl border border-card-border bg-surface p-s-5 shadow-card transition-shadow duration-220 hover:shadow-card-hover">
               <span className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", accentMap[f.accent].bg)}>
                 <f.icon className={cn("size-5", accentMap[f.accent].text)} />
               </span>
@@ -374,7 +374,7 @@ function PersonaSection() {
         </div>
         <div className="space-y-s-3">
           {personas.map((p) => (
-            <motion.article {...cardFadeUpNormal} key={p.name} className="rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
+            <motion.article key={p.name} {...cardFadeUpNormal} className="rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
               <div className="mb-s-2 flex gap-0.5">
                 {Array.from({ length: p.stars }).map((_, i) => (
                   <Star key={`s-${p.name}-${i}`} className="size-4 fill-warning text-warning" />
