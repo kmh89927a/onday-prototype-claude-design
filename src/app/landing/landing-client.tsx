@@ -64,6 +64,16 @@ const ioCenter = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
+const baContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+};
+
+const baItem = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } },
+};
+
 /* ── Hero ── */
 function HeroSection() {
   const ref = React.useRef<HTMLElement>(null);
@@ -269,46 +279,54 @@ function BeforeAfterSection() {
           <p className="text-caption-xs font-bold tracking-widest text-primary">BEFORE & AFTER</p>
           <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">이사 리서치,<br />이렇게 달라져요</h2>
         </div>
-        <div className="grid grid-cols-2 gap-s-3">
-          <div className="rounded-2xl border border-danger/20 bg-danger-soft p-s-4 space-y-s-3">
-            <span className="inline-block rounded-chip bg-danger/10 px-s-3 py-1 text-caption-xs font-bold text-danger">BEFORE</span>
-            <div className="space-y-s-2">
-              {["주말 6시간 발품", "앱 4~5개 번갈아", "학군카페 2주 탐색", "배우자 설득 근거 없음"].map((t) => (
-                <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
-                  <Clock className="size-4 shrink-0 text-danger" /><span>{t}</span>
-                </div>
-              ))}
+        <motion.div
+          variants={baContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="space-y-s-6"
+        >
+          <div className="grid grid-cols-2 gap-s-3">
+            <motion.div variants={baItem} className="rounded-2xl border border-danger/20 bg-danger-soft p-s-4 space-y-s-3">
+              <span className="inline-block rounded-chip bg-danger/10 px-s-3 py-1 text-caption-xs font-bold text-danger">BEFORE</span>
+              <div className="space-y-s-2">
+                {["주말 6시간 발품", "앱 4~5개 번갈아", "학군카페 2주 탐색", "배우자 설득 근거 없음"].map((t) => (
+                  <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
+                    <Clock className="size-4 shrink-0 text-danger" /><span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div variants={baItem} className="rounded-2xl border border-success/20 bg-success-soft p-s-4 space-y-s-3">
+              <span className="inline-block rounded-chip bg-success/10 px-s-3 py-1 text-caption-xs font-bold text-success">AFTER</span>
+              <div className="space-y-s-2">
+                {[
+                  { t: "6초 AI 진단", bold: "6초" },
+                  { t: "한 화면에 모두", bold: "한 화면" },
+                  { t: "학군+통근 통합", bold: "통합" },
+                  { t: "공유 링크로 합의", bold: "합의" },
+                ].map(({ t, bold }) => (
+                  <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
+                    <CheckCircle2 className="size-4 shrink-0 text-success" />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+          <motion.div variants={baItem} className="flex items-center justify-center gap-s-4 rounded-2xl bg-primary-soft/60 p-s-5">
+            <div className="text-center">
+              <p className="text-display-2 font-extrabold text-primary tabular">98%</p>
+              <p className="text-caption text-ink-3">시간 절약</p>
             </div>
-          </div>
-          <div className="rounded-2xl border border-success/20 bg-success-soft p-s-4 space-y-s-3">
-            <span className="inline-block rounded-chip bg-success/10 px-s-3 py-1 text-caption-xs font-bold text-success">AFTER</span>
-            <div className="space-y-s-2">
-              {[
-                { t: "6초 AI 진단", bold: "6초" },
-                { t: "한 화면에 모두", bold: "한 화면" },
-                { t: "학군+통근 통합", bold: "통합" },
-                { t: "공유 링크로 합의", bold: "합의" },
-              ].map(({ t, bold }) => (
-                <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
-                  <CheckCircle2 className="size-4 shrink-0 text-success" />
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-center gap-s-4 rounded-2xl bg-primary-soft/60 p-s-5">
-          <div className="text-center">
-            <p className="text-display-2 font-extrabold text-primary tabular">98%</p>
-            <p className="text-caption text-ink-3">시간 절약</p>
-          </div>
-          <div aria-hidden className="h-10 w-px bg-line" />
-          <p className="text-body-sm md:text-base leading-relaxed text-ink-2">
-            주말 <strong className="text-ink">6시간 발품</strong> →{" "}
-            <strong className="text-primary">6초 AI 진단</strong>
-            <br />이사 리서치를 극적으로 단축
-          </p>
-        </div>
+            <div aria-hidden className="h-10 w-px bg-line" />
+            <p className="text-body-sm md:text-base leading-relaxed text-ink-2">
+              주말 <strong className="text-ink">6시간 발품</strong> →{" "}
+              <strong className="text-primary">6초 AI 진단</strong>
+              <br />이사 리서치를 극적으로 단축
+            </p>
+          </motion.div>
+        </motion.div>
       </div>
     </motion.section>
   );
