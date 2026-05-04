@@ -11,19 +11,35 @@ import {
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { motion, MotionConfig } from "framer-motion";
+import { motion, MotionConfig, useScroll, useTransform, useReducedMotion, useMotionValue, animate } from "framer-motion";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.6, ease: "easeOut" as const },
+  transition: { duration: 1.0, ease: "easeOut" as const },
 };
 
 /* ── Hero ── */
 function HeroSection() {
+  const ref = React.useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+
+  const mountOpacity = useMotionValue(0);
+  const mountY = useMotionValue(24);
+  const scrollOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const opacity = useTransform([mountOpacity, scrollOpacity], (latest: number[]) => latest[0] * latest[1]);
+
+  React.useEffect(() => {
+    if (reduceMotion) return;
+    const c1 = animate(mountOpacity, 1, { duration: 1.2, ease: "easeOut" });
+    const c2 = animate(mountY, 0, { duration: 1.2, ease: "easeOut" });
+    return () => { c1.stop(); c2.stop(); };
+  }, [reduceMotion, mountOpacity, mountY]);
+
   return (
-    <motion.section {...fadeUp} id="hero" className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-s-5 text-center">
+    <motion.section ref={ref} style={reduceMotion ? undefined : { opacity, y: mountY }} id="hero" className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-s-5 text-center">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 40%, hsl(221 83% 53% / 0.15) 0%, transparent 70%), linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--primary-soft)) 50%, hsl(var(--bg)) 100%)" }} />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         {[...Array(6)].map((_, i) => (
