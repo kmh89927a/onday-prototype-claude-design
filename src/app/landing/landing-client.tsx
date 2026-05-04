@@ -31,7 +31,7 @@ function HeroSection() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-2xl space-y-s-6">
         <Logo size="lg" className="mx-auto" />
 
         {/* 핵심 Pain 자극 뱃지 */}
@@ -40,7 +40,7 @@ function HeroSection() {
           <span className="text-caption-xs font-bold text-warning">이사 가구 연 800만 · 입지 실패 25%</span>
         </div>
 
-        <h1 className="text-display-2 font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-display-1">
+        <h1 className="text-display-2 font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-display-1 md:text-5xl lg:text-6xl">
           주말 6시간 발품을,
           <br />
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -48,13 +48,13 @@ function HeroSection() {
           </span>
         </h1>
 
-        <p className="mx-auto max-w-sm text-body-lg leading-relaxed text-ink-2">
+        <p className="mx-auto max-w-sm text-body-lg md:text-xl lg:text-2xl leading-relaxed text-ink-2">
           복잡한 비교는 AI에게,
           <br />
           <strong className="text-ink">부부는 결정만.</strong>
         </p>
 
-        <p className="mx-auto max-w-sm text-body-sm leading-relaxed text-ink-3">
+        <p className="mx-auto max-w-sm text-body-sm md:text-base lg:text-lg leading-relaxed text-ink-3">
           남편 직장 + 아내 직장 + 아이 학군,
           <br />
           세 가지를 동시에 만족하는 동네를 찾아드려요.
@@ -88,14 +88,14 @@ function PainSection() {
   ];
   return (
     <motion.section {...fadeUp} id="pain" className="bg-surface px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-danger">PAIN POINT</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">
             3040 부부가 겪는
             <br />3가지 구조적 문제
           </h2>
-          <p className="text-body-sm text-ink-3">심각도 조사 결과, 모두 <strong className="text-danger">최고 등급 5.0</strong></p>
+          <p className="text-body-sm md:text-base text-ink-3">심각도 조사 결과, 모두 <strong className="text-danger">최고 등급 5.0</strong></p>
         </div>
         <div className="space-y-s-3">
           {pains.map((p, i) => (
@@ -108,7 +108,7 @@ function PainSection() {
                   <h3 className="text-title font-bold text-ink">{p.title}</h3>
                   <span className="rounded-chip bg-danger/10 px-2 py-0.5 text-caption-xs font-bold text-danger tabular">{p.severity}</span>
                 </div>
-                <p className="mt-s-1 whitespace-pre-line text-body-sm leading-relaxed text-ink-3">{p.desc}</p>
+                <p className="mt-s-1 whitespace-pre-line text-body-sm md:text-base leading-relaxed text-ink-3">{p.desc}</p>
               </div>
             </article>
           ))}
@@ -126,10 +126,10 @@ function PainSection() {
 function InputOutputSection() {
   return (
     <motion.section {...fadeUp} id="how" className="px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-7 text-center">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-7 text-center">
         <div className="space-y-s-2">
           <p className="text-caption-xs font-bold tracking-widest text-primary">HOW IT WORKS</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">복잡한 건 AI가,<br />결과만 확인하세요</h2>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">복잡한 건 AI가,<br />결과만 확인하세요</h2>
         </div>
         <div className="space-y-s-4">
           <div className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card">
@@ -181,17 +181,17 @@ function InputOutputSection() {
 function BeforeAfterSection() {
   return (
     <motion.section {...fadeUp} className="bg-surface px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">BEFORE & AFTER</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">이사 리서치,<br />이렇게 달라져요</h2>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">이사 리서치,<br />이렇게 달라져요</h2>
         </div>
         <div className="grid grid-cols-2 gap-s-3">
           <div className="rounded-2xl border border-danger/20 bg-danger-soft p-s-4 space-y-s-3">
             <span className="inline-block rounded-chip bg-danger/10 px-s-3 py-1 text-caption-xs font-bold text-danger">BEFORE</span>
             <div className="space-y-s-2">
               {["주말 6시간 발품", "앱 4~5개 번갈아", "학군카페 2주 탐색", "배우자 설득 근거 없음"].map((t) => (
-                <div key={t} className="flex items-center gap-s-2 text-body-sm text-ink-2">
+                <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
                   <Clock className="size-4 shrink-0 text-danger" /><span>{t}</span>
                 </div>
               ))}
@@ -206,7 +206,7 @@ function BeforeAfterSection() {
                 { t: "학군+통근 통합", bold: "통합" },
                 { t: "공유 링크로 합의", bold: "합의" },
               ].map(({ t, bold }) => (
-                <div key={t} className="flex items-center gap-s-2 text-body-sm text-ink-2">
+                <div key={t} className="flex items-center gap-s-2 text-body-sm md:text-base text-ink-2">
                   <CheckCircle2 className="size-4 shrink-0 text-success" />
                   <span>{t}</span>
                 </div>
@@ -220,7 +220,7 @@ function BeforeAfterSection() {
             <p className="text-caption text-ink-3">시간 절약</p>
           </div>
           <div aria-hidden className="h-10 w-px bg-line" />
-          <p className="text-body-sm leading-relaxed text-ink-2">
+          <p className="text-body-sm md:text-base leading-relaxed text-ink-2">
             주말 <strong className="text-ink">6시간 발품</strong> →{" "}
             <strong className="text-primary">6초 AI 진단</strong>
             <br />이사 리서치를 극적으로 단축
@@ -248,11 +248,11 @@ function ValueProposition() {
   };
   return (
     <motion.section {...fadeUp} className="px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">SOLUTION — 5대 핵심 기능</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">왜 동네궁합인가요?</h2>
-          <p className="text-body-sm text-ink-3">기능이 아닌, 당신이 얻을 <strong className="text-ink">가치</strong>를 말해요</p>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">왜 동네궁합인가요?</h2>
+          <p className="text-body-sm md:text-base text-ink-3">기능이 아닌, 당신이 얻을 <strong className="text-ink">가치</strong>를 말해요</p>
         </div>
         <div className="space-y-s-3">
           {features.map((f) => (
@@ -265,7 +265,7 @@ function ValueProposition() {
                   <h3 className="text-title font-bold text-ink">{f.title}</h3>
                   <span className={cn("rounded-chip px-2 py-0.5 text-caption-xs font-bold", accentMap[f.accent].bg, accentMap[f.accent].text)}>{f.tag}</span>
                 </div>
-                <p className="mt-s-1 text-body-sm leading-relaxed text-ink-3">{f.desc}</p>
+                <p className="mt-s-1 text-body-sm md:text-base leading-relaxed text-ink-3">{f.desc}</p>
               </div>
             </article>
           ))}
@@ -284,10 +284,10 @@ function PersonaSection() {
   ];
   return (
     <motion.section {...fadeUp} className="bg-surface px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">REAL STORIES</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">3040 부부의 실제 이야기</h2>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">3040 부부의 실제 이야기</h2>
         </div>
         <div className="space-y-s-3">
           {personas.map((p) => (
@@ -297,7 +297,7 @@ function PersonaSection() {
                   <Star key={`s-${p.name}-${i}`} className="size-4 fill-warning text-warning" />
                 ))}
               </div>
-              <p className="text-body-sm leading-relaxed text-ink-2">&ldquo;{p.quote}&rdquo;</p>
+              <p className="text-body-sm md:text-base leading-relaxed text-ink-2">&ldquo;{p.quote}&rdquo;</p>
               <div className="mt-s-3 flex items-center justify-between">
                 <div className="flex items-center gap-s-2">
                   <span className="flex size-8 items-center justify-center rounded-full bg-primary-soft text-caption font-bold text-primary">{p.name[0]}</span>
@@ -320,10 +320,10 @@ function PersonaSection() {
 function MarketSection() {
   return (
     <motion.section {...fadeUp} className="px-s-5 py-s-10">
-      <div className="mx-auto max-w-xl space-y-s-6">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">MARKET INSIGHT</p>
-          <h2 className="text-h2 font-extrabold tracking-tight text-ink">왜 지금인가요?</h2>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">왜 지금인가요?</h2>
         </div>
         <div className="grid grid-cols-2 gap-s-3">
           {[
@@ -340,12 +340,12 @@ function MarketSection() {
           ))}
         </div>
         <div className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 text-center">
-          <p className="text-body-sm font-bold text-ink">🔵 두 동선 동시 계산 도구는 시장에 전무</p>
-          <p className="mt-s-1 text-body-sm text-ink-3">프롭테크 × 하이퍼로컬 × 라이프스타일의 교차점<br />매물 중개와 경쟁하지 않는 비적대적 가치사슬</p>
+          <p className="text-body-sm md:text-base font-bold text-ink">🔵 두 동선 동시 계산 도구는 시장에 전무</p>
+          <p className="mt-s-1 text-body-sm md:text-base text-ink-3">프롭테크 × 하이퍼로컬 × 라이프스타일의 교차점<br />매물 중개와 경쟁하지 않는 비적대적 가치사슬</p>
         </div>
         <div className="flex items-start gap-s-2 rounded-xl bg-info-soft p-s-4">
           <Shield className="mt-0.5 size-4 shrink-0 text-info" />
-          <p className="text-body-sm text-ink-2">
+          <p className="text-body-sm md:text-base text-ink-2">
             <strong className="text-ink">카카오 모빌리티 · 국가공간정보포털</strong> 공공 데이터 기반
             <br /><span className="text-caption text-ink-3">입력 데이터는 분석 후 자동 삭제됩니다</span>
           </p>
