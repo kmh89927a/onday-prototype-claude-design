@@ -11,11 +11,19 @@ import {
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion, MotionConfig } from "framer-motion";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.6, ease: "easeOut" as const },
+};
 
 /* ── Hero ── */
 function HeroSection() {
   return (
-    <section id="hero" className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-s-5 text-center">
+    <motion.section {...fadeUp} id="hero" className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-s-5 text-center">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 40%, hsl(221 83% 53% / 0.15) 0%, transparent 70%), linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--primary-soft)) 50%, hsl(var(--bg)) 100%)" }} />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         {[...Array(6)].map((_, i) => (
@@ -67,7 +75,7 @@ function HeroSection() {
       <button onClick={() => document.getElementById("pain")?.scrollIntoView({ behavior: "smooth" })} className="absolute bottom-8 animate-bounce text-ink-3 transition-colors hover:text-primary" aria-label="아래로 스크롤">
         <ChevronDown className="size-6" />
       </button>
-    </section>
+    </motion.section>
   );
 }
 
@@ -79,7 +87,7 @@ function PainSection() {
     { icon: CalendarClock, title: "미래 시뮬레이션 불가", desc: "아이 입학 시점·전세 만료 등\n미래 변수 반영 도구 전무", severity: "5.0" },
   ];
   return (
-    <section id="pain" className="bg-surface px-s-5 py-s-10">
+    <motion.section {...fadeUp} id="pain" className="bg-surface px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-danger">PAIN POINT</p>
@@ -110,14 +118,14 @@ function PainSection() {
           <p className="mt-s-1 text-body-sm text-ink-2">한 사람의 납득만으로는 이사가 진행되지 않습니다.<br />배우자 설득용 데이터가 핵심 전환 레버입니다.</p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 /* ── I/O Diagram ── */
 function InputOutputSection() {
   return (
-    <section id="how" className="px-s-5 py-s-10">
+    <motion.section {...fadeUp} id="how" className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-7 text-center">
         <div className="space-y-s-2">
           <p className="text-caption-xs font-bold tracking-widest text-primary">HOW IT WORKS</p>
@@ -165,14 +173,14 @@ function InputOutputSection() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 /* ── Before/After ── */
 function BeforeAfterSection() {
   return (
-    <section className="bg-surface px-s-5 py-s-10">
+    <motion.section {...fadeUp} className="bg-surface px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">BEFORE & AFTER</p>
@@ -219,7 +227,7 @@ function BeforeAfterSection() {
           </p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -239,7 +247,7 @@ function ValueProposition() {
     warning: { bg: "bg-warning-soft", text: "text-warning" },
   };
   return (
-    <section className="px-s-5 py-s-10">
+    <motion.section {...fadeUp} className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">SOLUTION — 5대 핵심 기능</p>
@@ -263,7 +271,7 @@ function ValueProposition() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -275,7 +283,7 @@ function PersonaSection() {
     { name: "박상민", age: 41, type: "맹모 아빠", quote: "대치 학군 vs 광역버스 통근, 둘 다 포기 못하는데 교집합 동네를 찾아줘서 부부싸움이 줄었습니다.", feature: "F1 + 학군 레이어", stars: 5 },
   ];
   return (
-    <section className="bg-surface px-s-5 py-s-10">
+    <motion.section {...fadeUp} className="bg-surface px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">REAL STORIES</p>
@@ -304,14 +312,14 @@ function PersonaSection() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 /* ── Market & Trust ── */
 function MarketSection() {
   return (
-    <section className="px-s-5 py-s-10">
+    <motion.section {...fadeUp} className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl space-y-s-6">
         <div className="space-y-s-2 text-center">
           <p className="text-caption-xs font-bold tracking-widest text-primary">MARKET INSIGHT</p>
@@ -343,14 +351,14 @@ function MarketSection() {
           </p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
 /* ── Final CTA ── */
 function FinalCTA() {
   return (
-    <section className="px-s-5 py-s-10">
+    <motion.section {...fadeUp} className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-deep p-s-7 text-center shadow-elevated">
         <p className="text-caption-xs font-bold tracking-widest text-white/60">Closed Beta 2026.08 예정</p>
         <h2 className="mt-s-2 text-h2 font-extrabold leading-snug text-white">
@@ -369,7 +377,7 @@ function FinalCTA() {
           <p className="text-caption text-white/50">게스트 체험 가능 · 가입 없이 바로 시작</p>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -389,6 +397,7 @@ function Footer() {
 /* ── Main ── */
 export function LandingClient() {
   return (
+    <MotionConfig reducedMotion="user">
     <div className="relative min-h-screen bg-bg">
       <nav className="fixed inset-x-0 top-0 z-nav flex items-center justify-between border-b border-line/50 bg-bg/80 px-s-5 py-s-3 backdrop-blur-lg">
         <Logo size="sm" />
@@ -404,5 +413,6 @@ export function LandingClient() {
       <FinalCTA />
       <Footer />
     </div>
+    </MotionConfig>
   );
 }
