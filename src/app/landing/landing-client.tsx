@@ -20,6 +20,20 @@ const fadeUp = {
   transition: { duration: 1.0, ease: "easeOut" as const },
 };
 
+const cardFadeUpNormal = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-100px 0px -100px 0px" },
+  transition: { duration: 0.6, ease: "easeOut" as const },
+};
+
+const cardFadeUpFast = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-100px 0px -100px 0px" },
+  transition: { duration: 0.5, ease: "easeOut" as const },
+};
+
 /* ── Hero ── */
 function HeroSection() {
   const ref = React.useRef<HTMLElement>(null);
@@ -115,7 +129,7 @@ function PainSection() {
         </div>
         <div className="space-y-s-3">
           {pains.map((p, i) => (
-            <article key={p.title} className="flex gap-s-4 rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
+            <motion.article {...cardFadeUpNormal} key={p.title} className="flex gap-s-4 rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-danger-soft">
                 <p.icon className="size-5 text-danger" />
               </span>
@@ -126,7 +140,7 @@ function PainSection() {
                 </div>
                 <p className="mt-s-1 whitespace-pre-line text-body-sm md:text-base leading-relaxed text-ink-3">{p.desc}</p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
         <div className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 text-center">
@@ -272,7 +286,7 @@ function ValueProposition() {
         </div>
         <div className="space-y-s-3">
           {features.map((f) => (
-            <article key={f.title} className="group flex gap-s-4 rounded-2xl border border-card-border bg-surface p-s-5 shadow-card transition-shadow duration-220 hover:shadow-card-hover">
+            <motion.article {...cardFadeUpFast} key={f.title} className="group flex gap-s-4 rounded-2xl border border-card-border bg-surface p-s-5 shadow-card transition-shadow duration-220 hover:shadow-card-hover">
               <span className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", accentMap[f.accent].bg)}>
                 <f.icon className={cn("size-5", accentMap[f.accent].text)} />
               </span>
@@ -283,7 +297,7 @@ function ValueProposition() {
                 </div>
                 <p className="mt-s-1 text-body-sm md:text-base leading-relaxed text-ink-3">{f.desc}</p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
@@ -307,7 +321,7 @@ function PersonaSection() {
         </div>
         <div className="space-y-s-3">
           {personas.map((p) => (
-            <article key={p.name} className="rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
+            <motion.article {...cardFadeUpNormal} key={p.name} className="rounded-2xl border border-card-border bg-bg p-s-5 shadow-card">
               <div className="mb-s-2 flex gap-0.5">
                 {Array.from({ length: p.stars }).map((_, i) => (
                   <Star key={`s-${p.name}-${i}`} className="size-4 fill-warning text-warning" />
@@ -324,7 +338,7 @@ function PersonaSection() {
                 </div>
                 <span className="rounded-chip bg-primary-soft px-2 py-0.5 text-caption-xs font-bold text-primary">{p.feature}</span>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
