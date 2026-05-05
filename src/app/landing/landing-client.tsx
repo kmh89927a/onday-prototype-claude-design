@@ -507,6 +507,26 @@ function FinalCTA() {
   );
 }
 
+/* ── Pricing ── */
+function PricingSection() {
+  return (
+    <motion.section {...fadeUp} id="pricing" className="px-s-5 py-s-10">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
+        <div className="space-y-s-2 text-center">
+          <p className="text-caption-xs font-bold tracking-widest text-primary">PRICING</p>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">
+            지금은 무료,<br />정식 출시 후 합리적 가격
+          </h2>
+          <p className="text-body-sm md:text-base text-ink-3">
+            베타 기간 모든 기능 자유 이용 · 정식 출시 시점은 미리 보여드려요
+          </p>
+        </div>
+        <div className="space-y-s-3" />
+      </div>
+    </motion.section>
+  );
+}
+
 /* ── Footer ── */
 function Footer() {
   return (
@@ -537,6 +557,7 @@ export function LandingClient() {
       <PersonaSection />
       <MarketSection />
       <FinalCTA />
+      <PricingSection />
       <Footer />
     </div>
     </MotionConfig>
