@@ -673,9 +673,9 @@ export function LandingClient() {
       <BeforeAfterSection />
       <ValueProposition />
       <PersonaSection />
+      <PricingSection />
       <MarketSection />
       <FinalCTA />
-      <PricingSection />
       <Footer />
     </div>
     </MotionConfig>
