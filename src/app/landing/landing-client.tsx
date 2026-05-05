@@ -509,6 +509,11 @@ function FinalCTA() {
 
 /* ── Pricing ── */
 function PricingSection() {
+  const betaBenefits = [
+    "F1+F2 — 두 동선 교차 진단 + 배우자 공유 링크",
+    "F3+F4 — 데드라인 모드 · 싱글 모드 전체 이용",
+    "F5 — 입력값 저장 / 무제한 재진단",
+  ];
   return (
     <motion.section {...fadeUp} id="pricing" className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
@@ -521,7 +526,29 @@ function PricingSection() {
             베타 기간 모든 기능 자유 이용 · 정식 출시 시점은 미리 보여드려요
           </p>
         </div>
-        <div className="space-y-s-3" />
+        <div className="space-y-s-3">
+          <motion.article
+            {...cardFadeUpFast}
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-deep p-s-5 shadow-card ring-2 ring-primary/30 transition-shadow duration-220 hover:shadow-card-hover"
+          >
+            <span className="inline-block rounded-chip bg-white/20 px-s-3 py-1 text-caption-xs font-bold text-white">
+              지금 이용 가능 · Closed Beta 2026.08
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-white">베타 기간 무료</h3>
+            <p className="mt-s-1 text-caption text-white/80">정식 출시 전까지 모든 기능 자유 이용</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-white tabular">₩0</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {betaBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-white/90">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-white/80" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+        </div>
       </div>
     </motion.section>
   );
