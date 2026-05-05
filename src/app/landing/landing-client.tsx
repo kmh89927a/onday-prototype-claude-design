@@ -507,6 +507,144 @@ function FinalCTA() {
   );
 }
 
+/* ── Pricing ── */
+function PricingSection() {
+  const betaBenefits = [
+    "F1+F2 — 두 동선 교차 진단 + 배우자 공유 링크",
+    "F3+F4 — 데드라인 모드 · 싱글 모드 전체 이용",
+    "F5 — 입력값 저장 / 무제한 재진단",
+  ];
+  const oneTimeBenefits = [
+    "F1 — 6초 AI 동선 교차 진단 1회",
+    "F2 — 결과 리포트 영구 저장 + 공유 링크",
+    "F4 — 싱글 모드 / 학군 숨김 옵션",
+  ];
+  const subscriptionBenefits = [
+    "F5 — 무제한 재진단 (학군 변경·시세 변동 시 즉시 재계산)",
+    "F2+F5 — 즐겨찾기 동네 알림 (학교 배정·시세 변동)",
+    "2년 후 재진단 리마인더 (반복 이사 대비)",
+  ];
+  return (
+    <motion.section {...fadeUp} id="pricing" className="px-s-5 py-s-10">
+      <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
+        <div className="space-y-s-2 text-center">
+          <p className="text-caption-xs font-bold tracking-widest text-primary">PRICING</p>
+          <h2 className="text-h2 md:text-3xl lg:text-4xl font-extrabold tracking-tight text-ink">
+            베타 무료.<br />정식 출시 후 1회 / 월정액 선택
+          </h2>
+          <p className="text-body-sm md:text-base text-ink-3">
+            베타 기간 모든 기능 자유 이용 · 정식 출시 시점은 미리 보여드려요
+          </p>
+        </div>
+        <div className="space-y-s-3">
+          <motion.article
+            {...cardFadeUpFast}
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-deep p-s-5 shadow-card ring-2 ring-primary/30 transition-shadow duration-220 hover:shadow-card-hover"
+          >
+            <span className="inline-block rounded-chip bg-white/20 px-s-3 py-1 text-caption-xs font-bold text-white">
+              지금 이용 가능 · Closed Beta 2026.08
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-white">베타 기간 무료</h3>
+            <p className="mt-s-1 text-caption text-white/80">정식 출시 전까지 모든 기능 자유 이용</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-white tabular">₩0</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {betaBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-white/90">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-white/80" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <motion.article
+            {...cardFadeUpFast}
+            className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card opacity-85"
+          >
+            <span className="inline-block rounded-chip bg-ink-3/10 px-s-3 py-1 text-caption-xs font-bold text-ink-3">
+              Open Beta 2026.09 예정
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-ink">1회 진단</h3>
+            <p className="mt-s-1 text-caption text-ink-3">한 번 결제로 진단 1회 · 결과 영구 저장</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-ink tabular">₩30,000</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {oneTimeBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-ink-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-ink-3" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <motion.article
+            {...cardFadeUpFast}
+            className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card opacity-85"
+          >
+            <span className="inline-block rounded-chip bg-ink-3/10 px-s-3 py-1 text-caption-xs font-bold text-ink-3">
+              정식 출시 2026.11 예정
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-ink">월정액 구독</h3>
+            <p className="mt-s-1 text-caption text-ink-3">학교 배정 · 시세 변동 알림 + 무제한 재진단</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-ink tabular">₩10,000</span>
+              <span className="text-body-sm font-bold text-ink-3">/월</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {subscriptionBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-ink-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-ink-3" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+        </div>
+
+        <motion.div
+          {...cardFadeUpNormal}
+          className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 space-y-s-3"
+        >
+          <div className="space-y-s-2 text-center">
+            <span className="inline-block rounded-chip bg-primary/10 px-s-3 py-1 text-caption-xs font-bold text-primary">
+              비용 ROI
+            </span>
+            <h3 className="text-title font-bold text-ink">
+              1주 살아보기 vs 6초 진단
+            </h3>
+          </div>
+          <div className="grid grid-cols-2 gap-s-3">
+            <div className="rounded-xl bg-bg p-s-4 text-center">
+              <p className="text-caption-xs text-ink-3">단기체류 1주</p>
+              <p className="mt-s-1 text-h3 font-extrabold text-ink-2 tabular">
+                50~80<span className="ml-0.5 text-body-sm font-bold text-ink-3">만원</span>
+              </p>
+            </div>
+            <div className="rounded-xl bg-bg p-s-4 text-center">
+              <p className="text-caption-xs text-primary">동네궁합 1회</p>
+              <p className="mt-s-1 text-h3 font-extrabold text-primary tabular">
+                3~5<span className="ml-0.5 text-body-sm font-bold text-ink-3">만원</span>
+              </p>
+            </div>
+          </div>
+          <p className="text-center text-body-sm font-bold text-primary">
+            93~96% 절감
+          </p>
+          <p className="text-center text-caption-xs text-ink-3 leading-relaxed">
+            ※ 출처: 단기체류 플랫폼 1주 기준 가격대 (PRD §1-3 시장 조사)
+            <br />
+            50~80만원/주 → 3~5만원/회 비교
+          </p>
+        </motion.div>
+      </div>
+    </motion.section>
+  );
+}
+
 /* ── Footer ── */
 function Footer() {
   return (
@@ -535,6 +673,7 @@ export function LandingClient() {
       <BeforeAfterSection />
       <ValueProposition />
       <PersonaSection />
+      <PricingSection />
       <MarketSection />
       <FinalCTA />
       <Footer />
