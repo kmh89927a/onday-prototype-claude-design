@@ -604,6 +604,42 @@ function PricingSection() {
             </ul>
           </motion.article>
         </div>
+
+        <motion.div
+          {...cardFadeUpNormal}
+          className="rounded-2xl border border-primary/20 bg-primary-soft/50 p-s-5 space-y-s-3"
+        >
+          <div className="space-y-s-2 text-center">
+            <span className="inline-block rounded-chip bg-primary/10 px-s-3 py-1 text-caption-xs font-bold text-primary">
+              비용 ROI
+            </span>
+            <h3 className="text-title font-bold text-ink">
+              1주 살아보기 vs 6초 진단
+            </h3>
+          </div>
+          <div className="grid grid-cols-2 gap-s-3">
+            <div className="rounded-xl bg-bg p-s-4 text-center">
+              <p className="text-caption-xs text-ink-3">단기체류 1주</p>
+              <p className="mt-s-1 text-h3 font-extrabold text-ink-2 tabular">
+                50~80<span className="ml-0.5 text-body-sm font-bold text-ink-3">만원</span>
+              </p>
+            </div>
+            <div className="rounded-xl bg-bg p-s-4 text-center">
+              <p className="text-caption-xs text-primary">동네궁합 1회</p>
+              <p className="mt-s-1 text-h3 font-extrabold text-primary tabular">
+                3~5<span className="ml-0.5 text-body-sm font-bold text-ink-3">만원</span>
+              </p>
+            </div>
+          </div>
+          <p className="text-center text-body-sm font-bold text-primary">
+            93~96% 절감
+          </p>
+          <p className="text-center text-caption-xs text-ink-3 leading-relaxed">
+            ※ 출처: 단기체류 플랫폼 1주 기준 가격대 (PRD §1-3 시장 조사)
+            <br />
+            50~80만원/주 → 3~5만원/회 비교
+          </p>
+        </motion.div>
       </div>
     </motion.section>
   );
