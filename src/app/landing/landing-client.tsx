@@ -514,6 +514,16 @@ function PricingSection() {
     "F3+F4 — 데드라인 모드 · 싱글 모드 전체 이용",
     "F5 — 입력값 저장 / 무제한 재진단",
   ];
+  const oneTimeBenefits = [
+    "F1 — 6초 AI 동선 교차 진단 1회",
+    "F2 — 결과 리포트 영구 저장 + 공유 링크",
+    "카카오 모빌리티 · 국가공간정보 데이터 기반",
+  ];
+  const subscriptionBenefits = [
+    "F5 — 무제한 재진단 (학군 변경·시세 변동 시 즉시 재계산)",
+    "F2+F5 — 즐겨찾기 동네 알림 (학교 배정·시세 변동)",
+    "2년 후 재진단 리마인더 (반복 이사 대비)",
+  ];
   return (
     <motion.section {...fadeUp} id="pricing" className="px-s-5 py-s-10">
       <div className="mx-auto max-w-xl md:max-w-3xl space-y-s-6">
@@ -543,6 +553,51 @@ function PricingSection() {
               {betaBenefits.map((b) => (
                 <li key={b} className="flex gap-s-2 text-body-sm text-white/90">
                   <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-white/80" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <motion.article
+            {...cardFadeUpFast}
+            className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card opacity-85"
+          >
+            <span className="inline-block rounded-chip bg-ink-3/10 px-s-3 py-1 text-caption-xs font-bold text-ink-3">
+              Open Beta 2026.09 예정
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-ink">1회 진단</h3>
+            <p className="mt-s-1 text-caption text-ink-3">한 번 결제로 진단 1회 · 결과 영구 저장</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-ink tabular">₩30,000</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {oneTimeBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-ink-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-ink-3" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <motion.article
+            {...cardFadeUpFast}
+            className="rounded-2xl border border-card-border bg-surface p-s-5 shadow-card opacity-85"
+          >
+            <span className="inline-block rounded-chip bg-ink-3/10 px-s-3 py-1 text-caption-xs font-bold text-ink-3">
+              정식 출시 2026.11 예정
+            </span>
+            <h3 className="mt-s-3 text-h3 font-extrabold text-ink">월정액 구독</h3>
+            <p className="mt-s-1 text-caption text-ink-3">학교 배정 · 시세 변동 알림 + 무제한 재진단</p>
+            <div className="mt-s-3 flex items-baseline gap-s-1">
+              <span className="text-display-2 font-extrabold text-ink tabular">₩10,000</span>
+              <span className="text-body-sm font-bold text-ink-3">/월</span>
+            </div>
+            <ul className="mt-s-4 space-y-s-2">
+              {subscriptionBenefits.map((b) => (
+                <li key={b} className="flex gap-s-2 text-body-sm text-ink-2">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-ink-3" />
                   <span>{b}</span>
                 </li>
               ))}
