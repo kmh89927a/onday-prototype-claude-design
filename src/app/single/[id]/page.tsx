@@ -1,8 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-
-import { prisma } from "@/lib/db";
-import type { CandidateArea } from "@/lib/types";
 
 import { SingleResultView } from "./single-result-view";
 
@@ -17,15 +13,5 @@ interface PageProps {
 
 export default async function SinglePage({ params }: PageProps) {
   const { id } = await params;
-  const diagnosis = await prisma.diagnosis.findUnique({ where: { id } });
-  if (!diagnosis) notFound();
-
-  const candidates: CandidateArea[] = JSON.parse(diagnosis.candidates);
-  return (
-    <SingleResultView
-      id={id}
-      addressA={diagnosis.addressA}
-      candidates={candidates}
-    />
-  );
+  return <SingleResultView id={id} />;
 }
